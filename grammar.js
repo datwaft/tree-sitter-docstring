@@ -27,6 +27,14 @@ module.exports = grammar({
     $.exception_name,
     $._parenthesized_type,
     $._return_type,
+    $._code_end,
+    $.fence_start,
+    $.fence_end,
+    $.code_directive,
+    $.directive_option,
+    $.code_content,
+    $.doctest_prompt,
+    $.code_line,
     $.text,
     $._error_sentinel,
   ],
@@ -35,7 +43,7 @@ module.exports = grammar({
 
   rules: {
     document: $ => repeat(choice(
-      $.text,
+      $._content,
       $.args_section,
       $.returns_section,
       $.yields_section,
@@ -54,9 +62,26 @@ module.exports = grammar({
       $.methods_section,
     )),
 
+    _content: $ => choice($.text, $.fenced_code_block, $.rst_code_block, $.doctest),
+
+    fenced_code_block: $ => seq(
+      $.fence_start,
+      optional($.code_content),
+      choice($.fence_end, $._code_end),
+    ),
+
+    rst_code_block: $ => seq(
+      $.code_directive,
+      repeat($.directive_option),
+      optional($.code_content),
+      $._code_end,
+    ),
+
+    doctest: $ => prec.right(repeat1(seq($.doctest_prompt, optional($.code_line)))),
+
     args_section: $ => seq(
       field('header', alias($._args_header, $.section_header)),
-      repeat(choice($.parameter, $.text)),
+      repeat(choice($.parameter, $._content)),
       $._section_end,
     ),
 
@@ -74,79 +99,79 @@ module.exports = grammar({
 
     raises_section: $ => seq(
       field('header', alias($._raises_header, $.section_header)),
-      repeat(choice($.exception, $.text)),
+      repeat(choice($.exception, $._content)),
       $._section_end,
     ),
 
     attributes_section: $ => seq(
       field('header', alias($._attributes_header, $.section_header)),
-      repeat(choice($.attribute, $.text)),
+      repeat(choice($.attribute, $._content)),
       $._section_end,
     ),
 
     keyword_args_section: $ => seq(
       field('header', alias($._keyword_args_header, $.section_header)),
-      repeat(choice($.parameter, $.text)),
+      repeat(choice($.parameter, $._content)),
       $._section_end,
     ),
 
     other_parameters_section: $ => seq(
       field('header', alias($._other_parameters_header, $.section_header)),
-      repeat(choice($.parameter, $.text)),
+      repeat(choice($.parameter, $._content)),
       $._section_end,
     ),
 
     warns_section: $ => seq(
       field('header', alias($._warns_header, $.section_header)),
-      repeat(choice($.exception, $.text)),
+      repeat(choice($.exception, $._content)),
       $._section_end,
     ),
 
     examples_section: $ => seq(
       field('header', alias($._examples_header, $.section_header)),
-      repeat($.text),
+      repeat($._content),
       $._section_end,
     ),
 
     notes_section: $ => seq(
       field('header', alias($._notes_header, $.section_header)),
-      repeat($.text),
+      repeat($._content),
       $._section_end,
     ),
 
     warning_section: $ => seq(
       field('header', alias($._warning_header, $.section_header)),
-      repeat($.text),
+      repeat($._content),
       $._section_end,
     ),
 
     admonition_section: $ => seq(
       field('header', alias($._admonition_header, $.section_header)),
-      repeat($.text),
+      repeat($._content),
       $._section_end,
     ),
 
     see_also_section: $ => seq(
       field('header', alias($._see_also_header, $.section_header)),
-      repeat($.text),
+      repeat($._content),
       $._section_end,
     ),
 
     references_section: $ => seq(
       field('header', alias($._references_header, $.section_header)),
-      repeat($.text),
+      repeat($._content),
       $._section_end,
     ),
 
     todo_section: $ => seq(
       field('header', alias($._todo_header, $.section_header)),
-      repeat($.text),
+      repeat($._content),
       $._section_end,
     ),
 
     methods_section: $ => seq(
       field('header', alias($._methods_header, $.section_header)),
-      repeat($.text),
+      repeat($._content),
       $._section_end,
     ),
 
@@ -188,6 +213,6 @@ module.exports = grammar({
       field('description', $.description),
     ),
 
-    description: $ => repeat1($.text),
+    description: $ => repeat1($._content),
   },
 });

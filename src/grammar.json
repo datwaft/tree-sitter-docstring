@@ -9,7 +9,7 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "text"
+            "name": "_content"
           },
           {
             "type": "SYMBOL",
@@ -78,6 +78,121 @@
         ]
       }
     },
+    "_content": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "text"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "fenced_code_block"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "rst_code_block"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "doctest"
+        }
+      ]
+    },
+    "fenced_code_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "fence_start"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "code_content"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "fence_end"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_code_end"
+            }
+          ]
+        }
+      ]
+    },
+    "rst_code_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "code_directive"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "directive_option"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "code_content"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_code_end"
+        }
+      ]
+    },
+    "doctest": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "REPEAT1",
+        "content": {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "doctest_prompt"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "code_line"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
     "args_section": {
       "type": "SEQ",
       "members": [
@@ -105,7 +220,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "text"
+                "name": "_content"
               }
             ]
           }
@@ -211,7 +326,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "text"
+                "name": "_content"
               }
             ]
           }
@@ -249,7 +364,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "text"
+                "name": "_content"
               }
             ]
           }
@@ -287,7 +402,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "text"
+                "name": "_content"
               }
             ]
           }
@@ -325,7 +440,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "text"
+                "name": "_content"
               }
             ]
           }
@@ -363,7 +478,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "text"
+                "name": "_content"
               }
             ]
           }
@@ -394,7 +509,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "text"
+            "name": "_content"
           }
         },
         {
@@ -423,7 +538,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "text"
+            "name": "_content"
           }
         },
         {
@@ -452,7 +567,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "text"
+            "name": "_content"
           }
         },
         {
@@ -481,7 +596,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "text"
+            "name": "_content"
           }
         },
         {
@@ -510,7 +625,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "text"
+            "name": "_content"
           }
         },
         {
@@ -539,7 +654,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "text"
+            "name": "_content"
           }
         },
         {
@@ -568,7 +683,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "text"
+            "name": "_content"
           }
         },
         {
@@ -597,7 +712,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "text"
+            "name": "_content"
           }
         },
         {
@@ -830,7 +945,7 @@
       "type": "REPEAT1",
       "content": {
         "type": "SYMBOL",
-        "name": "text"
+        "name": "_content"
       }
     }
   },
@@ -930,6 +1045,38 @@
     {
       "type": "SYMBOL",
       "name": "_return_type"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_code_end"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "fence_start"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "fence_end"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "code_directive"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "directive_option"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "code_content"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "doctest_prompt"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "code_line"
     },
     {
       "type": "SYMBOL",

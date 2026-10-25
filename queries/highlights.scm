@@ -25,3 +25,12 @@
   (#set! priority 110))
 
 (text) @spell
+
+([
+  (fence_start)
+  (fence_end)
+  (code_directive)
+  (directive_option)
+  (doctest_prompt)
+] @punctuation.special
+  (#set! priority 110))

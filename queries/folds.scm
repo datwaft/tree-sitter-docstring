@@ -15,5 +15,8 @@
   (references_section)
   (todo_section)
   (methods_section)
+  (fenced_code_block)
+  (rst_code_block)
+  (doctest)
 ] @fold
   (#trim! @fold))

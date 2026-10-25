@@ -20,3 +20,11 @@
 
 ; Wrapped prose and literal blocks can use more than one indentation level.
 (description) @indent.auto
+
+; nvim-treesitter may choose the nested Python tree for doctest continuations;
+; its indent engine currently does not account for the omitted prompt ranges.
+[
+  (fenced_code_block)
+  (rst_code_block)
+  (doctest)
+] @indent.auto

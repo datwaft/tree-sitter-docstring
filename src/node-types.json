@@ -19,6 +19,18 @@
       "required": false,
       "types": [
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         }
@@ -45,7 +57,19 @@
       "required": false,
       "types": [
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
           "type": "parameter",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
           "named": true
         },
         {
@@ -115,6 +139,18 @@
           "named": true
         },
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         }
@@ -130,7 +166,38 @@
       "required": true,
       "types": [
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
+          "named": true
+        },
+        {
           "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "doctest",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_line",
+          "named": true
+        },
+        {
+          "type": "doctest_prompt",
           "named": true
         }
       ]
@@ -158,7 +225,15 @@
           "named": true
         },
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
           "type": "examples_section",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
           "named": true
         },
         {
@@ -187,6 +262,10 @@
         },
         {
           "type": "returns_section",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
           "named": true
         },
         {
@@ -236,6 +315,18 @@
       "required": false,
       "types": [
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         }
@@ -269,6 +360,29 @@
     }
   },
   {
+    "type": "fenced_code_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_content",
+          "named": true
+        },
+        {
+          "type": "fence_end",
+          "named": true
+        },
+        {
+          "type": "fence_start",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "keyword_args_section",
     "named": true,
     "fields": {
@@ -288,7 +402,19 @@
       "required": false,
       "types": [
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
           "type": "parameter",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
           "named": true
         },
         {
@@ -318,6 +444,18 @@
       "required": false,
       "types": [
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         }
@@ -343,6 +481,18 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
+          "named": true
+        },
         {
           "type": "text",
           "named": true
@@ -370,7 +520,19 @@
       "required": false,
       "types": [
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
           "type": "parameter",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
           "named": true
         },
         {
@@ -436,7 +598,19 @@
       "required": false,
       "types": [
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
           "type": "exception",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
           "named": true
         },
         {
@@ -465,6 +639,18 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
+          "named": true
+        },
         {
           "type": "text",
           "named": true
@@ -525,6 +711,29 @@
     }
   },
   {
+    "type": "rst_code_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code_content",
+          "named": true
+        },
+        {
+          "type": "code_directive",
+          "named": true
+        },
+        {
+          "type": "directive_option",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "see_also_section",
     "named": true,
     "fields": {
@@ -543,6 +752,18 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
+          "named": true
+        },
         {
           "type": "text",
           "named": true
@@ -570,6 +791,18 @@
       "required": false,
       "types": [
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         }
@@ -595,6 +828,18 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "doctest",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
+          "named": true
+        },
         {
           "type": "text",
           "named": true
@@ -622,7 +867,19 @@
       "required": false,
       "types": [
         {
+          "type": "doctest",
+          "named": true
+        },
+        {
           "type": "exception",
+          "named": true
+        },
+        {
+          "type": "fenced_code_block",
+          "named": true
+        },
+        {
+          "type": "rst_code_block",
           "named": true
         },
         {
@@ -671,7 +928,35 @@
     "named": false
   },
   {
+    "type": "code_content",
+    "named": true
+  },
+  {
+    "type": "code_directive",
+    "named": true
+  },
+  {
+    "type": "code_line",
+    "named": true
+  },
+  {
+    "type": "directive_option",
+    "named": true
+  },
+  {
+    "type": "doctest_prompt",
+    "named": true
+  },
+  {
     "type": "exception_name",
+    "named": true
+  },
+  {
+    "type": "fence_end",
+    "named": true
+  },
+  {
+    "type": "fence_start",
     "named": true
   },
   {
