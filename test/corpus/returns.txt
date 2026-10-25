@@ -320,4 +320,4 @@ Returns:
     header: (section_header)
     (return_value
       description: (description
-        (text)))))
+        (text (interpreted_text (role_name) (markup_delimiter) (inline_content) (markup_delimiter)))))))

@@ -510,6 +510,65 @@ function cases.code_multiline()
   equal(parser:language_for_range({ row, col, row, col + 1 }):lang(), "python")
 end
 
+function cases.inline_highlights()
+  local parser = open(
+    [=[def demo(*args):
+    """Use ``value`` with *care* and **attention**.
+
+    See :py:class:`Path`, `details <https://example.org>`_, and https://example.org.
+
+    Args:
+        *args (tuple[str, ...]): The ``inputs``.
+    """
+    return args
+]=],
+    "python"
+  )
+  equal(#doc_roots(parser), 1)
+  for _, item in ipairs({
+    { "value", "markup.raw" },
+    { "care", "markup.italic" },
+    { "attention", "markup.strong" },
+    { "Path", "markup.link" },
+    { "details", "markup.link" },
+    { "https://example.org.", "markup.link.url" },
+    { "*args (tuple", "variable.parameter" },
+    { "inputs", "markup.raw" },
+  }) do
+    local capture = highlight(item[1], item[2])
+    assert(tonumber(capture.metadata.priority) > 100, item[1])
+  end
+  highlight("value", "nospell")
+end
+
+function cases.inline_conceal()
+  local original_level, original_cursor = vim.wo.conceallevel, vim.wo.concealcursor
+  local parser = open("Use ``value`` with *care* and **attention**; see :class:`Path`.", "docstring")
+  local query = assert(vim.treesitter.query.get("docstring", "highlights"))
+  local ranges = {}
+  for id, node, metadata in query:iter_captures(parser:parse()[1]:root(), 0) do
+    if query.captures[id] == "conceal" then
+      equal(metadata.conceal or (metadata[id] or {}).conceal, "")
+      ranges[#ranges + 1] = vim.treesitter.get_node_text(node, 0)
+    end
+  end
+  equal(ranges, { "``", "``", "*", "*", "**", "**", "`", "`" })
+  equal(vim.wo.conceallevel, original_level)
+  equal(vim.wo.concealcursor, original_cursor)
+end
+
+function cases.inline_edits()
+  local parser = open("Use *care* here.", "docstring")
+  highlight("care", "markup.italic")
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, { "Use *care here." })
+  local tree = parser:parse(true)[1]
+  assert(not tree:root():has_error(), tree:root():sexpr())
+  assert(not tree:root():sexpr():find("emphasis", 1, true))
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, { "Use **care** here." })
+  parser:parse(true)
+  highlight("care", "markup.strong")
+end
+
 local name = assert(arg[1], "Expected a test case name")
 assert(cases[name], "Unknown case: " .. name)()
 local messages = vim.fn.execute("messages")

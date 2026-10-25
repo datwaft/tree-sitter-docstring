@@ -1,0 +1,275 @@
+==================
+Inline literals
+==================
+Use ``value * 2`` here.
+
+---
+
+(document (text (inline_literal (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Emphasis and strong emphasis
+==================
+Use *care* and **attention**.
+
+---
+
+(document (text (emphasis (markup_delimiter) (inline_content) (markup_delimiter)) (strong_emphasis (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Interpreted text is distinct from literals
+==================
+See `value` here.
+
+---
+
+(document (text (interpreted_text (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Prefix roles and Sphinx namespaces
+==================
+See :py:class:`pathlib.Path` here.
+
+---
+
+(document (text (interpreted_text (role_name) (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Suffix roles
+==================
+See `pathlib.Path`:class: here.
+
+---
+
+(document (text (interpreted_text (markup_delimiter) (inline_content) (markup_delimiter) (role_name))))
+
+==================
+Quoted hyperlink references
+==================
+Read `the docs <https://example.org>`_ now.
+
+---
+
+(document (text (reference (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Anonymous quoted references
+==================
+Read `the docs`__ now.
+
+---
+
+(document (text (reference (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Simple references
+==================
+Read Python_ and docs__ now.
+
+---
+
+(document (text (reference (inline_content) (markup_delimiter)) (reference (inline_content) (markup_delimiter))))
+
+==================
+Standalone URLs
+==================
+See https://example.org/path?q=1 and mailto:me@example.org.
+
+---
+
+(document (text (url) (url)))
+
+==================
+Escaped markers
+==================
+Keep \*plain* and \`plain` and \**plain**.
+
+---
+
+(document (text))
+
+==================
+Unmatched and empty markers
+==================
+Keep *unfinished and `` and ** and ` and :class:`unfinished.
+
+---
+
+(document (text))
+
+==================
+Word interiors are prose
+==================
+Keep a*b*c and a**b**c and file*.* and __init__.
+
+---
+
+(document (text))
+
+==================
+Literal content does not process escapes
+==================
+Use ``C:\path\`` here.
+
+---
+
+(document (text (inline_literal (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Escaped closing emphasis
+==================
+Use *one \* two* here.
+
+---
+
+(document (text (emphasis (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Inline markup at the start of a line
+==================
+*Important* text.
+
+---
+
+(document (text (emphasis (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Double backticks at the start are not a fence
+==================
+``code`` here.
+
+---
+
+(document (text (inline_literal (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Section descriptions support inline markup
+==================
+Args:
+    *args (tuple[str, ...]): Use ``values`` with *care*.
+    **kwargs: See :class:`Mapping`.
+Returns:
+    str: The **result**.
+
+---
+
+(document (args_section (section_header) (parameter (identifier) (type) (description (text (inline_literal (markup_delimiter) (inline_content) (markup_delimiter)) (emphasis (markup_delimiter) (inline_content) (markup_delimiter))))) (parameter (identifier) (description (text (interpreted_text (role_name) (markup_delimiter) (inline_content) (markup_delimiter)))))) (returns_section (section_header) (return_value (type) (description (text (strong_emphasis (markup_delimiter) (inline_content) (markup_delimiter)))))))
+
+==================
+Literal blocks protect inline markers
+==================
+Example::
+
+    *plain* ``plain`` :class:`plain`
+
+Use *emphasis*.
+
+---
+
+(document (text) (text) (text (emphasis (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Code blocks protect inline markers
+==================
+```python
+value = "*plain* ``plain``"
+```
+
+Use **strong**.
+
+---
+
+(document (fenced_code_block (fence_start) (code_content) (fence_end)) (text (strong_emphasis (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Doctest output protects inline markers
+==================
+>>> print("*plain*")
+*plain*
+
+Use ``code``.
+
+---
+
+(document (doctest (doctest_prompt) (code_line)) (text) (text (inline_literal (markup_delimiter) (inline_content) (markup_delimiter))))
+==================
+A prose colon after interpreted text
+==================
+Use `value`: explanation.
+
+---
+
+(document (text (interpreted_text (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Reference before sentence punctuation
+==================
+See Python_.
+
+---
+
+(document (text (reference (inline_content) (markup_delimiter))))
+
+==================
+Unicode inline content
+==================
+Use ``año`` and *日本語*.
+
+---
+
+(document (text (inline_literal (markup_delimiter) (inline_content) (markup_delimiter)) (emphasis (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Markup before a literal marker
+==================
+Use *care*::
+
+    *plain*
+
+Use ``code``.
+
+---
+
+(document (text (emphasis (markup_delimiter) (inline_content) (markup_delimiter))) (text) (text (inline_literal (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Escaped backslash before markup
+==================
+Use \\ *care*.
+
+---
+
+(document (text (emphasis (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Unfinished prefix does not hide later markup
+==================
+Use *unfinished and ``value`` here.
+
+---
+
+(document (text (inline_literal (markup_delimiter) (inline_content) (markup_delimiter))))
+
+==================
+Arbitrary prose schemes are not email links
+==================
+This is random:prose.
+
+---
+
+(document (text))
+==================
+Code directly in parameter sections stays code
+==================
+Args:
+    ```python
+    value = "*plain*"
+    ```
+    >>> print("``plain``")
+    ``plain``
+
+    name: Use *care*.
+
+---
+
+(document (args_section (section_header) (fenced_code_block (fence_start) (code_content) (fence_end)) (doctest (doctest_prompt) (code_line)) (text) (parameter (identifier) (description (text (emphasis (markup_delimiter) (inline_content) (markup_delimiter)))))))

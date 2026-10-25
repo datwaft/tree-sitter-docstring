@@ -13,6 +13,10 @@ before(() => {
 });
 
 const cases = {
+  inline_highlights: 'highlight reST inline prose inside Python docstrings',
+  inline_conceal: 'conceal only inline delimiters with standard query metadata',
+  inline_edits: 'recover inline captures after incomplete edits',
+
   extension_highlights: 'highlight Napoleon sections, keyword parameters, and warning names',
   extension_indent: 'preserve Napoleon section indentation',
   extension_folds: 'fold Napoleon sections separately',

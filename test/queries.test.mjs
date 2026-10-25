@@ -102,3 +102,23 @@ test('fold queries select real sections rather than literal examples', () => {
   assert.deepEqual(found.map((c) => textOf(c).split('\n')[0]),
     ['Args:', 'Returns:', 'Returns:', 'Yields:', 'Raises:', 'Attributes:']);
 });
+
+test('highlight exact inline content without swallowing its delimiters', () => {
+  const found = captures('highlights');
+  for (const [name, needle, token] of [['markup.raw', 'inline_value'], ['markup.italic', 'care'],
+    ['markup.strong', 'attention'], ['markup.link', 'Path'],
+    ['markup.link', 'the docs <https://example.org>'], ['markup.link', 'Python_', 'Python'],
+    ['markup.link.url', 'https://example.org/path'], ['markup.link', 'one`_word two'],
+    ['markup.link', 'Target'], ['function.builtin', ':class:.', ':class:']]) {
+    hasCapture(found, name, needle, token);
+  }
+  for (const needle of ['inline_value', 'Path', 'the docs <https://example.org>', 'https://example.org/path']) {
+    hasCapture(found, 'nospell', needle);
+  }
+  assert.equal(found.filter((c) => c.name === 'markup.italic').length, 1);
+});
+
+test('conceal exactly the inline delimiters, preserving roles and link text', () => {
+  const found = captures('highlights').filter((c) => c.name === 'conceal');
+  assert.deepEqual(found.map(textOf), ['``', '``', '*', '*', '**', '**', '`', '`', '`', '`_', '_', '`', '`', '`', '`']);
+});

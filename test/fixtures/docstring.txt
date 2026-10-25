@@ -25,3 +25,8 @@ Raises:
 
 Attributes:
     enabled (bool): Whether the service is enabled.
+
+Use ``inline_value`` with *care* and **attention**.
+See :class:`Path`, `the docs <https://example.org>`_, Python_, and https://example.org/path.
+Keep \*plain* and __init__ as prose.
+Use `one`_word two` here; see `Target`:class:.
