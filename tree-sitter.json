@@ -1,0 +1,18 @@
+{
+  "grammars": [
+    {
+      "name": "docstring",
+      "scope": "text.docstring",
+      "path": ".",
+      "injection-regex": "^docstring$"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "authors": [
+      {
+        "name": "David Guevara"
+      }
+    ]
+  }
+}

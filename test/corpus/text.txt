@@ -1,0 +1,34 @@
+==================
+Empty docstring
+==================
+
+---
+
+(document)
+
+==================
+Summary
+==================
+
+Fetch a record.
+
+---
+
+(document
+  (text))
+
+==================
+Multiline description
+==================
+
+Fetch a record.
+
+    Return the matching record: its identifier and contents.
+    Preserve the original order.
+
+---
+
+(document
+  (text)
+  (text)
+  (text))

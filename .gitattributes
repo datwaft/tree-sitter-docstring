@@ -1,0 +1,7 @@
+* text=auto eol=lf
+
+src/parser.c linguist-generated=true
+src/grammar.json linguist-generated=true
+src/node-types.json linguist-generated=true
+src/tree_sitter/* linguist-generated=true
+package-lock.json linguist-generated=true

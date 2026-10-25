@@ -1,0 +1,13 @@
+{
+  "name": "tree-sitter-docstring",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tree-sitter grammar for Google-style Python docstrings",
+  "scripts": {
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "0.27.1"
+  }
+}
