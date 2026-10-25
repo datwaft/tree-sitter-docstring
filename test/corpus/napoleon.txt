@@ -1,0 +1,603 @@
+==================
+Napoleon Arguments section
+==================
+
+Arguments:
+    value (list[str]): A documented value.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Parameters section
+==================
+
+Parameters:
+    value (list[str]): A documented value.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Keyword Args section
+==================
+
+Keyword Args:
+    value (list[str]): A documented value.
+
+---
+
+(document
+  (keyword_args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Keyword Arguments section
+==================
+
+Keyword Arguments:
+    value (list[str]): A documented value.
+
+---
+
+(document
+  (keyword_args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Other Args section
+==================
+
+Other Args:
+    value (list[str]): A documented value.
+
+---
+
+(document
+  (other_parameters_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Other Arguments section
+==================
+
+Other Arguments:
+    value (list[str]): A documented value.
+
+---
+
+(document
+  (other_parameters_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Other Parameters section
+==================
+
+Other Parameters:
+    value (list[str]): A documented value.
+
+---
+
+(document
+  (other_parameters_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Return section
+==================
+
+Return:
+    list[str]: Documented values.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Yield section
+==================
+
+Yield:
+    list[str]: Documented values.
+
+---
+
+(document
+  (yields_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Raise section
+==================
+
+Raise:
+    package.SomeWarning: A documented condition.
+
+---
+
+(document
+  (raises_section
+    header: (section_header)
+    (exception
+      name: (exception_name)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Warn section
+==================
+
+Warn:
+    package.SomeWarning: A documented condition.
+
+---
+
+(document
+  (warns_section
+    header: (section_header)
+    (exception
+      name: (exception_name)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Warns section
+==================
+
+Warns:
+    package.SomeWarning: A documented condition.
+
+---
+
+(document
+  (warns_section
+    header: (section_header)
+    (exception
+      name: (exception_name)
+      description: (description
+        (text)))))
+
+==================
+Napoleon Example section
+==================
+
+Example:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Examples section
+==================
+
+Examples:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Note section
+==================
+
+Note:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Notes section
+==================
+
+Notes:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Warning section
+==================
+
+Warning:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (warning_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Warnings section
+==================
+
+Warnings:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (warning_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Attention section
+==================
+
+Attention:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (admonition_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Caution section
+==================
+
+Caution:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (admonition_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Danger section
+==================
+
+Danger:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (admonition_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Error section
+==================
+
+Error:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (admonition_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Hint section
+==================
+
+Hint:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (admonition_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Important section
+==================
+
+Important:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (admonition_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Tip section
+==================
+
+Tip:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (admonition_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon See Also section
+==================
+
+See Also:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (see_also_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon References section
+==================
+
+References:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (references_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Todo section
+==================
+
+Todo:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (todo_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon Methods section
+==================
+
+Methods:
+    A paragraph with key: value and (ordinary parentheses).
+
+---
+
+(document
+  (methods_section
+    header: (section_header)
+    (text)))
+
+==================
+Multiword headings allow horizontal whitespace
+==================
+
+Keyword   Args :
+  value: A value.
+See	Also:
+  Another function.
+
+---
+
+(document
+  (keyword_args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text))))
+  (see_also_section
+    header: (section_header)
+    (text)))
+
+==================
+Napoleon headings are case insensitive
+==================
+
+nOtEs:
+  Ordinary prose.
+KEYWORD ARGUMENTS:
+  value: A value.
+
+---
+
+(document
+  (notes_section
+    header: (section_header)
+    (text))
+  (keyword_args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Prose sections end before adjacent sections
+==================
+
+Examples:
+  Descriptive example.
+Notes:
+  First note.
+  Second note.
+Warning:
+  Cautionary prose.
+Warns:
+  UserWarning: A structured warning.
+Returns:
+  A string formatted as key: value.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (text))
+  (notes_section
+    header: (section_header)
+    (text)
+    (text))
+  (warning_section
+    header: (section_header)
+    (text))
+  (warns_section
+    header: (section_header)
+    (exception
+      name: (exception_name)
+      description: (description
+        (text))))
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Known headings nested in prose stay prose
+==================
+
+Notes:
+  A description containing a nested heading:
+    Examples:
+      An example description.
+  More prose.
+Todo:
+  Finish the work.
+
+---
+
+(document
+  (notes_section
+    header: (section_header)
+    (text)
+    (text)
+    (text)
+    (text))
+  (todo_section
+    header: (section_header)
+    (text)))
+
+==================
+Unknown and inline headings stay prose
+==================
+
+Custom Section:
+  User-defined prose.
+Notes: this is inline prose.
+Examples::
+  Notes:
+    A literal example.
+
+---
+
+(document
+  (text)
+  (text)
+  (text)
+  (text)
+  (text)
+  (text))
+
+==================
+Empty extension sections recover while editing
+==================
+
+Examples:
+Notes:
+Keyword Args:
+Warns:
+See Also:
+
+---
+
+(document
+  (examples_section
+    header: (section_header))
+  (notes_section
+    header: (section_header))
+  (keyword_args_section
+    header: (section_header))
+  (warns_section
+    header: (section_header))
+  (see_also_section
+    header: (section_header)))

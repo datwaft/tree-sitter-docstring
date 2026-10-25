@@ -1,0 +1,16 @@
+Keyword Args:
+    value (list[str]): A documented value.
+
+Warns:
+    package.SomeWarning: A documented condition.
+
+Examples:
+    A first example.
+    A second example.
+
+Notes:
+    A first note.
+    A second note.
+
+See Also:
+    Another function.

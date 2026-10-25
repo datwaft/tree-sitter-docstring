@@ -323,6 +323,41 @@ function cases.fold_edits()
   fold_range("Returns:", "Another line.")
 end
 
+---@return vim.treesitter.LanguageTree
+local function extension_fixture()
+  return open(table.concat(vim.fn.readfile(root .. "/test/fixtures/extensions.txt"), "\n"), "docstring")
+end
+
+function cases.extension_highlights()
+  extension_fixture()
+  for _, heading in ipairs({ "Keyword Args:", "Warns:", "Examples:", "Notes:", "See Also:" }) do
+    highlight(heading, "markup.heading")
+  end
+  highlight("value (list", "variable.parameter")
+  highlight("list[str]", "type")
+  highlight("package.SomeWarning", "type")
+end
+
+function cases.extension_indent()
+  extension_fixture()
+  local before = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  vim.cmd("silent normal! gg=G")
+  equal(vim.api.nvim_buf_get_lines(0, 0, -1, false), before)
+end
+
+function cases.extension_folds()
+  local parser = extension_fixture()
+  vim.wo.foldmethod = "expr"
+  vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+  vim.wo.foldminlines = 0
+  vim.wo.foldlevel = 99
+  parser:parse(true)
+  vim.cmd("silent normal! zx")
+  fold_range("Examples:", "A second example.")
+  fold_range("Notes:", "A second note.")
+  fold_range("See Also:", "Another function.")
+end
+
 local name = assert(arg[1], "Expected a test case name")
 assert(cases[name], "Unknown case: " .. name)()
 local messages = vim.fn.execute("messages")

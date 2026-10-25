@@ -13,6 +13,9 @@ before(() => {
 });
 
 const cases = {
+  extension_highlights: 'highlight Napoleon sections, keyword parameters, and warning names',
+  extension_indent: 'preserve Napoleon section indentation',
+  extension_folds: 'fold Napoleon sections separately',
   query_loading: 'load all query files in Neovim',
   injection: 'inject separate module, class, and async-function docstrings',
   injection_boundaries: 'exclude delimiters, ordinary strings, and arbitrary blocks',
