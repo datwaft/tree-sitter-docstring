@@ -296,6 +296,25 @@
     }
   },
   {
+    "type": "emphasis",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "inline_content",
+          "named": true
+        },
+        {
+          "type": "markup_delimiter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "examples_section",
     "named": true,
     "fields": {
@@ -377,6 +396,48 @@
         },
         {
           "type": "fence_start",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "inline_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "inline_content",
+          "named": true
+        },
+        {
+          "type": "markup_delimiter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interpreted_text",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "inline_content",
+          "named": true
+        },
+        {
+          "type": "markup_delimiter",
+          "named": true
+        },
+        {
+          "type": "role_name",
           "named": true
         }
       ]
@@ -621,6 +682,25 @@
     }
   },
   {
+    "type": "reference",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "inline_content",
+          "named": true
+        },
+        {
+          "type": "markup_delimiter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "references_section",
     "named": true,
     "fields": {
@@ -766,6 +846,60 @@
         },
         {
           "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "strong_emphasis",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "inline_content",
+          "named": true
+        },
+        {
+          "type": "markup_delimiter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "text",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "emphasis",
+          "named": true
+        },
+        {
+          "type": "inline_literal",
+          "named": true
+        },
+        {
+          "type": "interpreted_text",
+          "named": true
+        },
+        {
+          "type": "reference",
+          "named": true
+        },
+        {
+          "type": "strong_emphasis",
+          "named": true
+        },
+        {
+          "type": "url",
           "named": true
         }
       ]
@@ -964,15 +1098,31 @@
     "named": true
   },
   {
+    "type": "inline_content",
+    "named": true
+  },
+  {
+    "type": "markup_delimiter",
+    "named": true
+  },
+  {
+    "type": "role_name",
+    "named": true
+  },
+  {
     "type": "section_header",
     "named": true
   },
   {
-    "type": "text",
-    "named": true
+    "type": "text_fragment",
+    "named": false
   },
   {
     "type": "type",
+    "named": true
+  },
+  {
+    "type": "url",
     "named": true
   }
 ]

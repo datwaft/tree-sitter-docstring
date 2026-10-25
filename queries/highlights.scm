@@ -34,3 +34,29 @@
   (doctest_prompt)
 ] @punctuation.special
   (#set! priority 110))
+
+; Inline markup overrides the enclosing Python string and documentation prose.
+((inline_literal (inline_content) @markup.raw @nospell)
+  (#set! priority 120))
+
+((emphasis (inline_content) @markup.italic)
+  (#set! priority 120))
+
+((strong_emphasis (inline_content) @markup.strong)
+  (#set! priority 120))
+
+((interpreted_text (inline_content) @markup.link @nospell)
+  (#set! priority 120))
+
+((role_name) @function.builtin
+  (#set! priority 120))
+
+((reference (inline_content) @markup.link @nospell)
+  (#set! priority 120))
+
+((url) @markup.link.url @nospell
+  (#set! priority 120))
+
+((markup_delimiter) @punctuation.delimiter @conceal
+  (#set! priority 120)
+  (#set! conceal ""))

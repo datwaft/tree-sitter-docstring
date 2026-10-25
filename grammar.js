@@ -35,7 +35,21 @@ module.exports = grammar({
     $.code_content,
     $.doctest_prompt,
     $.code_line,
-    $.text,
+    $._entry_start,
+    $._text_start,
+    $._text_fragment,
+    $._text_end,
+    $._literal_start,
+    $._emphasis_start,
+    $._strong_start,
+    $._interpreted_start,
+    $._role_start,
+    $._reference_start,
+    $._simple_reference,
+    $._inline_content,
+    $._inline_close,
+    $._role_suffix,
+    $.url,
     $._error_sentinel,
   ],
 
@@ -63,6 +77,58 @@ module.exports = grammar({
     )),
 
     _content: $ => choice($.text, $.fenced_code_block, $.rst_code_block, $.doctest),
+
+    // Keep prose grouped by line, with markup exposed only inside prose.
+    text: $ => seq(
+      $._text_start,
+      repeat1(choice(
+        alias($._text_fragment, 'text_fragment'),
+        $.inline_literal,
+        $.emphasis,
+        $.strong_emphasis,
+        $.interpreted_text,
+        $.reference,
+        $.url,
+      )),
+      $._text_end,
+    ),
+
+    inline_literal: $ => seq(
+      alias($._literal_start, $.markup_delimiter),
+      alias($._inline_content, $.inline_content),
+      alias($._inline_close, $.markup_delimiter),
+    ),
+
+    emphasis: $ => seq(
+      alias($._emphasis_start, $.markup_delimiter),
+      alias($._inline_content, $.inline_content),
+      alias($._inline_close, $.markup_delimiter),
+    ),
+
+    strong_emphasis: $ => seq(
+      alias($._strong_start, $.markup_delimiter),
+      alias($._inline_content, $.inline_content),
+      alias($._inline_close, $.markup_delimiter),
+    ),
+
+    interpreted_text: $ => seq(
+      choice(
+        alias($._interpreted_start, $.markup_delimiter),
+        seq(alias($._role_start, $.role_name), alias('`', $.markup_delimiter)),
+      ),
+      alias($._inline_content, $.inline_content),
+      alias($._inline_close, $.markup_delimiter),
+      optional(alias($._role_suffix, $.role_name)),
+    ),
+
+    reference: $ => seq(
+      choice(
+        seq(alias($._reference_start, $.markup_delimiter),
+          alias($._inline_content, $.inline_content)),
+        alias($._simple_reference, $.inline_content),
+      ),
+      alias($._inline_close, $.markup_delimiter),
+    ),
 
     fenced_code_block: $ => seq(
       $.fence_start,
@@ -176,6 +242,7 @@ module.exports = grammar({
     ),
 
     parameter: $ => seq(
+      $._entry_start,
       field('name', $.identifier),
       optional($._type_annotation),
       ':',
@@ -184,6 +251,7 @@ module.exports = grammar({
     ),
 
     attribute: $ => seq(
+      $._entry_start,
       field('name', $.identifier),
       optional($._type_annotation),
       ':',
@@ -192,6 +260,7 @@ module.exports = grammar({
     ),
 
     exception: $ => seq(
+      $._entry_start,
       field('name', $.exception_name),
       ':',
       optional(field('description', $.description)),

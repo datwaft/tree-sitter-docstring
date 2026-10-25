@@ -35,7 +35,21 @@ enum TokenType {
   CODE_CONTENT,
   DOCTEST_PROMPT,
   CODE_LINE,
-  TEXT,
+  ENTRY_START,
+  TEXT_START,
+  TEXT_FRAGMENT,
+  TEXT_END,
+  LITERAL_START,
+  EMPHASIS_START,
+  STRONG_START,
+  INTERPRETED_START,
+  ROLE_START,
+  REFERENCE_START,
+  SIMPLE_REFERENCE,
+  INLINE_CONTENT,
+  INLINE_CLOSE,
+  ROLE_SUFFIX,
+  URL,
   ERROR_SENTINEL,
 };
 
@@ -54,6 +68,17 @@ typedef struct {
   char fence_character;
   uint8_t doctest_mode; // 0: inactive; 1: input; 2: expected output.
   bool doctest_code;
+  bool entry_name_pending;
+  bool in_text;
+  bool inline_enabled;
+  bool text_line_start;
+  bool text_space;
+  bool text_escaped;
+  uint32_t text_indent;
+  uint32_t text_colons;
+  int32_t text_previous;
+  uint32_t inline_length;
+  uint8_t inline_close;
 } Scanner;
 
 static bool horizontal_space(int32_t c) {
@@ -274,6 +299,245 @@ static bool scan_code_block(Scanner *scanner, TSLexer *lexer, const bool *valid)
   return false;
 }
 
+// reST delimiters need word boundaries. In particular, arithmetic and Python
+// identifiers containing stars or underscores are ordinary prose.
+static bool inline_before(int32_t c) {
+  return c == 0 || horizontal_space(c) || c == '(' || c == '[' || c == '{' ||
+         c == '<' || c == '\'' || c == '"' || c == ':' || c == '-' || c == '/';
+}
+
+static bool inline_after(int32_t c) {
+  return inline_before(c) || c == ')' || c == ']' || c == '}' || c == '>' ||
+         c == '.' || c == ',' || c == ';' || c == '!' || c == '?' ||
+         c == '\n' || c == '\r';
+}
+
+// Probe a complete pair before emitting its opener. Failed probes leave the
+// marked end on plain source, so unfinished edits stay plain text.
+// Stay within one prose line so an unfinished opener cannot absorb a section.
+static bool scan_inline_pair(Scanner *scanner, TSLexer *lexer, int32_t marker,
+                             unsigned width, enum TokenType token) {
+  if (line_end(lexer) || horizontal_space(lexer->lookahead)) return false;
+  uint32_t length = 0;
+  int32_t previous = 0;
+  bool escaped = false;
+  while (!line_end(lexer)) {
+    int32_t c = lexer->lookahead;
+    if (c == marker && !escaped) {
+      unsigned count = 0;
+      while (lexer->lookahead == marker) {
+        lexer->advance(lexer, false);
+        count++;
+      }
+      if (count == width && length && !horizontal_space(previous)) {
+        unsigned close = width;
+        enum TokenType matched = token;
+        if (marker == '`' && width == 1 && token != ROLE_START && lexer->lookahead == '_') {
+          lexer->advance(lexer, false);
+          close++;
+          if (lexer->lookahead == '_') { lexer->advance(lexer, false); close++; }
+          matched = REFERENCE_START;
+        }
+        if (inline_after(lexer->lookahead) || lexer->eof(lexer) ||
+            (marker == '`' && width == 1 && lexer->lookahead == ':')) {
+          scanner->inline_length = length;
+          scanner->inline_close = (uint8_t)close;
+          scanner->text_colons = 0;
+          scanner->text_space = false;
+          scanner->text_escaped = false;
+          lexer->result_symbol = matched;
+          return true;
+        }
+        count = close;
+      }
+      length += count;
+      previous = marker;
+      continue;
+    }
+    if (width == 2 && marker == '`') {
+      escaped = false; // Backslashes are literal inside inline literals.
+    } else {
+      escaped = !escaped && c == '\\';
+    }
+    previous = c;
+    length++;
+    lexer->advance(lexer, false);
+  }
+  return false;
+}
+
+static void text_character(Scanner *scanner, int32_t c) {
+  if (c == ':') {
+    scanner->text_colons = scanner->text_space ? 1 : scanner->text_colons + 1;
+    scanner->text_space = false;
+  } else if (horizontal_space(c)) {
+    scanner->text_space = true;
+  } else {
+    scanner->text_colons = 0;
+    scanner->text_space = false;
+  }
+  scanner->text_escaped = !scanner->text_escaped && c == '\\';
+  scanner->text_previous = c;
+}
+
+static bool scan_text(Scanner *scanner, TSLexer *lexer, const bool *valid) {
+  if (valid[INLINE_CONTENT] && scanner->inline_length) {
+    for (uint32_t i = 0; i < scanner->inline_length; i++) {
+      if (line_end(lexer)) return false;
+      lexer->advance(lexer, false);
+    }
+    scanner->inline_length = 0;
+    lexer->mark_end(lexer);
+    lexer->result_symbol = INLINE_CONTENT;
+    return true;
+  }
+  if (valid[INLINE_CLOSE] && scanner->inline_close) {
+    for (unsigned i = 0; i < scanner->inline_close; i++) {
+      if (line_end(lexer)) return false;
+      scanner->text_previous = lexer->lookahead;
+      lexer->advance(lexer, false);
+    }
+    scanner->inline_close = 0;
+    lexer->mark_end(lexer);
+    lexer->result_symbol = INLINE_CLOSE;
+    return true;
+  }
+  if (valid[ROLE_SUFFIX] && lexer->lookahead == ':') {
+    // An ordinary prose colon after interpreted text is still a text fragment.
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    bool has_name = name_start(lexer->lookahead);
+    int32_t previous = 0;
+    while (name_continue(lexer->lookahead) || lexer->lookahead == ':' ||
+           lexer->lookahead == '-' || lexer->lookahead == '+' || lexer->lookahead == '.') {
+      if (previous == ':' && inline_after(lexer->lookahead)) break;
+      previous = lexer->lookahead;
+      lexer->advance(lexer, false);
+    }
+    if (has_name && previous == ':') {
+      lexer->mark_end(lexer);
+      scanner->text_previous = ':';
+      lexer->result_symbol = ROLE_SUFFIX;
+      return true;
+    }
+    if (!valid[TEXT_FRAGMENT]) return false;
+    text_character(scanner, ':');
+    lexer->result_symbol = TEXT_FRAGMENT;
+    return true;
+  }
+  if (!valid[TEXT_FRAGMENT]) return false;
+  if (line_end(lexer)) {
+    scanner->in_text = false;
+    if (scanner->inline_enabled && scanner->text_line_start && scanner->text_colons >= 2) {
+      scanner->literal_indent = scanner->text_indent;
+    }
+    lexer->result_symbol = TEXT_END;
+    return valid[TEXT_END];
+  }
+  bool consumed = false;
+  while (!line_end(lexer)) {
+    int32_t c = lexer->lookahead;
+    bool candidate = scanner->inline_enabled && !scanner->text_escaped &&
+                     inline_before(scanner->text_previous) &&
+                     (c == '*' || c == '`' || c == ':' || name_start(c));
+    if (candidate && consumed) break;
+    if (candidate) {
+      // Mark a one-character fallback before looking ahead through the construct.
+      lexer->advance(lexer, false);
+      lexer->mark_end(lexer);
+      if (c == '*' || c == '`') {
+        unsigned width = 1;
+        if (lexer->lookahead == c) { lexer->advance(lexer, false); width++; }
+        enum TokenType token = c == '*' ? (width == 2 ? STRONG_START : EMPHASIS_START) :
+                                         (width == 2 ? LITERAL_START : INTERPRETED_START);
+        lexer->mark_end(lexer);
+        if (scan_inline_pair(scanner, lexer, c, width, token)) return true;
+        // Both opening characters are plain on failure.
+        text_character(scanner, c);
+        lexer->result_symbol = TEXT_FRAGMENT;
+        return true;
+      }
+      if (c == ':') {
+        // The first colon is already consumed.
+        bool has_name = name_start(lexer->lookahead);
+        int32_t previous = 0;
+        while (name_continue(lexer->lookahead) || lexer->lookahead == ':' ||
+               lexer->lookahead == '-' || lexer->lookahead == '+' || lexer->lookahead == '.') {
+          previous = lexer->lookahead;
+          lexer->advance(lexer, false);
+        }
+        if (has_name && previous == ':' && lexer->lookahead == '`') {
+          lexer->mark_end(lexer); // Role token excludes the opening backtick.
+          lexer->advance(lexer, false);
+          if (scan_inline_pair(scanner, lexer, '`', 1, ROLE_START)) return true;
+        }
+      } else {
+        // Simple references and standalone URI schemes share a word prefix.
+        char scheme[16] = {0};
+        scheme[0] = c < 0x80 ? (char)c : '?';
+        uint32_t length = 1;
+        unsigned underscores = c == '_' ? 1 : 0;
+        while (name_continue(lexer->lookahead) || lexer->lookahead == '-' ||
+               (lexer->lookahead == '.' && !underscores)) {
+          int32_t current = lexer->lookahead;
+          if (length < sizeof(scheme) - 1) scheme[length] = current < 0x80 ? (char)current : '?';
+          underscores = current == '_' ? underscores + 1 : 0;
+          lexer->advance(lexer, false);
+          length++;
+          if (!underscores) lexer->mark_end(lexer);
+        }
+        if (c != '_' && underscores && underscores <= 2 && length > underscores &&
+            (inline_after(lexer->lookahead) || lexer->eof(lexer))) {
+          scanner->inline_close = (uint8_t)underscores;
+          scanner->text_colons = 0;
+          lexer->result_symbol = SIMPLE_REFERENCE;
+          return true;
+        }
+        if (lexer->lookahead == ':') {
+          lexer->advance(lexer, false);
+          bool uri = false;
+          if (lexer->lookahead == '/') {
+            lexer->advance(lexer, false);
+            if (lexer->lookahead == '/') { lexer->advance(lexer, false); uri = true; }
+          } else if (strcmp(scheme, "mailto") == 0) { uri = true; }
+          if (uri) {
+            bool content = false;
+            int depth = 0;
+            while (!line_end(lexer) && !horizontal_space(lexer->lookahead) &&
+                   lexer->lookahead != '<' && lexer->lookahead != '>' && lexer->lookahead != '"' &&
+                   lexer->lookahead != '\'') {
+              int32_t current = lexer->lookahead;
+              if (current == ')' && depth == 0) break;
+              if (current == '(') depth++;
+              if (current == ')') depth--;
+              lexer->advance(lexer, false);
+              if (current != '.' && current != ',' && current != ';' && current != '!' && current != '?') {
+                lexer->mark_end(lexer);
+                content = true;
+              }
+            }
+            if (content) {
+              scanner->text_previous = 'x';
+              scanner->text_colons = 0;
+              lexer->result_symbol = URL;
+              return true;
+            }
+          }
+        }
+      }
+      text_character(scanner, c);
+      lexer->result_symbol = TEXT_FRAGMENT;
+      return true;
+    }
+    text_character(scanner, c);
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    consumed = true;
+  }
+  lexer->result_symbol = TEXT_FRAGMENT;
+  return true;
+}
+
 void *tree_sitter_docstring_external_scanner_create(void) {
   Scanner *scanner = ts_calloc(1, sizeof(Scanner));
   scanner->pending_indent = UINT32_MAX;
@@ -300,7 +564,18 @@ unsigned tree_sitter_docstring_external_scanner_serialize(void *payload, char *b
   buffer[31] = scanner->fence_character;
   buffer[32] = (char)scanner->doctest_mode;
   buffer[33] = (char)scanner->doctest_code;
-  return 34;
+  buffer[34] = scanner->entry_name_pending;
+  buffer[35] = scanner->in_text;
+  buffer[36] = scanner->inline_enabled;
+  buffer[37] = scanner->text_line_start;
+  buffer[38] = scanner->text_space;
+  buffer[39] = scanner->text_escaped;
+  memcpy(buffer + 40, &scanner->text_indent, 4);
+  memcpy(buffer + 44, &scanner->text_colons, 4);
+  memcpy(buffer + 48, &scanner->text_previous, 4);
+  memcpy(buffer + 52, &scanner->inline_length, 4);
+  buffer[56] = scanner->inline_close;
+  return 57;
 }
 
 void tree_sitter_docstring_external_scanner_deserialize(void *payload, const char *buffer,
@@ -309,7 +584,7 @@ void tree_sitter_docstring_external_scanner_deserialize(void *payload, const cha
   memset(scanner, 0, sizeof(Scanner));
   scanner->pending_indent = UINT32_MAX;
   scanner->literal_indent = UINT32_MAX;
-  if (length == 34) {
+  if (length == 57) {
     memcpy(&scanner->section_indent, buffer, 4);
     memcpy(&scanner->entry_indent, buffer + 4, 4);
     memcpy(&scanner->pending_indent, buffer + 8, 4);
@@ -323,6 +598,17 @@ void tree_sitter_docstring_external_scanner_deserialize(void *payload, const cha
     scanner->fence_character = buffer[31];
     scanner->doctest_mode = (uint8_t)buffer[32];
     scanner->doctest_code = buffer[33] != 0;
+    scanner->entry_name_pending = buffer[34] != 0;
+    scanner->in_text = buffer[35] != 0;
+    scanner->inline_enabled = buffer[36] != 0;
+    scanner->text_line_start = buffer[37] != 0;
+    scanner->text_space = buffer[38] != 0;
+    scanner->text_escaped = buffer[39] != 0;
+    memcpy(&scanner->text_indent, buffer + 40, 4);
+    memcpy(&scanner->text_colons, buffer + 44, 4);
+    memcpy(&scanner->text_previous, buffer + 48, 4);
+    memcpy(&scanner->inline_length, buffer + 52, 4);
+    scanner->inline_close = (uint8_t)buffer[56];
   }
 }
 
@@ -346,6 +632,16 @@ bool tree_sitter_docstring_external_scanner_scan(void *payload, TSLexer *lexer,
       (valid_symbols[CODE_CONTENT] || valid_symbols[FENCE_END] ||
        valid_symbols[DIRECTIVE_OPTION] || valid_symbols[CODE_END])) {
     return scan_code_block(scanner, lexer, valid_symbols);
+  }
+  if (scanner->in_text) return scan_text(scanner, lexer, valid_symbols);
+  if (scanner->entry_name_pending && (valid_symbols[IDENTIFIER] || valid_symbols[EXCEPTION_NAME])) {
+    while (lexer->lookahead == '*') lexer->advance(lexer, false);
+    while (name_continue(lexer->lookahead) ||
+           (valid_symbols[EXCEPTION_NAME] && lexer->lookahead == '.')) lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    scanner->entry_name_pending = false;
+    lexer->result_symbol = valid_symbols[EXCEPTION_NAME] ? EXCEPTION_NAME : IDENTIFIER;
+    return true;
   }
   uint32_t column = lexer->get_column(lexer);
   bool line_start = column == 0 || scanner->pending_indent != UINT32_MAX ||
@@ -471,6 +767,34 @@ bool tree_sitter_docstring_external_scanner_scan(void *payload, TSLexer *lexer,
     goto text;
   }
 
+  if (!in_literal && !in_doctest && valid_symbols[ENTRY_START]) {
+    bool is_exception = scanner->section == RAISES_HEADER + 1 || scanner->section == WARNS_HEADER + 1;
+    if (!is_exception) {
+      for (unsigned stars = 0; stars < 2 && lexer->lookahead == '*'; stars++) lexer->advance(lexer, false);
+    }
+    bool complete = name_start(lexer->lookahead);
+    while (name_continue(lexer->lookahead) || (is_exception && lexer->lookahead == '.')) lexer->advance(lexer, false);
+    skip_horizontal_space(lexer);
+    if (complete && !is_exception && lexer->lookahead == '(') {
+      lexer->advance(lexer, false);
+      complete = scan_parenthesized_type(lexer);
+      if (complete) { lexer->advance(lexer, false); skip_horizontal_space(lexer); }
+    }
+    if (complete && lexer->lookahead == ':') {
+      lexer->advance(lexer, false);
+      if (lexer->lookahead != ':') {
+        scanner->in_entry = true;
+        scanner->entry_name_pending = true;
+        scanner->entry_indent = indent;
+        scanner->pending_indent = UINT32_MAX;
+        scanner->literal_indent = UINT32_MAX;
+        lexer->result_symbol = ENTRY_START;
+        return true;
+      }
+    }
+    goto text;
+  }
+
   if (!in_literal && !in_doctest && valid_symbols[PARENTHESIZED_TYPE]) {
     if (lexer->lookahead == ')' || !scan_parenthesized_type(lexer)) return false;
     lexer->mark_end(lexer);
@@ -488,15 +812,7 @@ bool tree_sitter_docstring_external_scanner_scan(void *payload, TSLexer *lexer,
   } else if (!in_literal && !in_doctest && !scanner->in_entry) {
     char heading[32] = {0};
     uint32_t length = 0;
-    bool is_exception = valid_symbols[EXCEPTION_NAME];
-    if (!is_exception) {
-      for (unsigned stars = 0; stars < 2 && lexer->lookahead == '*'; stars++) {
-        lexer->advance(lexer, false);
-        length++;
-      }
-    }
-    bool has_name = name_start(lexer->lookahead);
-    while (name_continue(lexer->lookahead) || (is_exception && lexer->lookahead == '.')) {
+    while (name_continue(lexer->lookahead)) {
       if (length < sizeof(heading) - 1) {
         int32_t c = lexer->lookahead;
         heading[length] = c >= 'A' && c <= 'Z' ? (char)(c + 'a' - 'A') :
@@ -505,13 +821,10 @@ bool tree_sitter_docstring_external_scanner_scan(void *payload, TSLexer *lexer,
       length++;
       lexer->advance(lexer, false);
     }
-    lexer->mark_end(lexer);
     skip_horizontal_space(lexer);
 
     // Normalize only the heading probe; the token still preserves its source text.
-    bool single_word = true;
     while (name_start(lexer->lookahead)) {
-      single_word = false;
       if (length < sizeof(heading) - 1) heading[length] = ' ';
       length++;
       while (name_continue(lexer->lookahead)) {
@@ -523,7 +836,6 @@ bool tree_sitter_docstring_external_scanner_scan(void *payload, TSLexer *lexer,
         length++;
         lexer->advance(lexer, false);
       }
-      lexer->mark_end(lexer);
       skip_horizontal_space(lexer);
     }
     static const struct { const char *name; enum TokenType token; } headings[] = {
@@ -582,51 +894,21 @@ bool tree_sitter_docstring_external_scanner_scan(void *payload, TSLexer *lexer,
         break;
       }
     }
-
-    if (has_name && single_word && (valid_symbols[IDENTIFIER] || is_exception)) {
-      bool complete = true;
-      if (!is_exception && lexer->lookahead == '(') {
-        lexer->advance(lexer, false);
-        complete = scan_parenthesized_type(lexer);
-        if (complete) {
-          lexer->advance(lexer, false);
-          skip_horizontal_space(lexer);
-        }
-      }
-      if (complete && lexer->lookahead == ':') {
-        lexer->advance(lexer, false);
-        if (lexer->lookahead != ':') {
-          scanner->in_entry = true;
-          scanner->entry_indent = indent;
-          scanner->pending_indent = UINT32_MAX;
-          scanner->literal_indent = UINT32_MAX;
-          lexer->result_symbol = is_exception ? EXCEPTION_NAME : IDENTIFIER;
-          return true;
-        }
-        trailing_colons = 1;
-      }
-    }
   }
 
 text:
-  if (!valid_symbols[TEXT]) return false;
+  if (!valid_symbols[TEXT_START]) return false;
+  scanner->in_text = true;
+  scanner->inline_enabled = !in_literal && !in_doctest;
+  scanner->text_line_start = line_start;
+  scanner->text_indent = indent;
+  scanner->text_colons = trailing_colons;
+  scanner->text_space = trailing_space;
+  scanner->text_previous = 0;
+  scanner->text_escaped = false;
+  scanner->literal_indent = literal_indent;
   if (scanner->doctest_mode) scanner->doctest_mode = 2;
-  while (!line_end(lexer)) {
-    if (lexer->lookahead == ':') {
-      trailing_colons = trailing_space ? 1 : trailing_colons + 1;
-      trailing_space = false;
-    } else if (horizontal_space(lexer->lookahead)) {
-      trailing_space = true;
-    } else {
-      trailing_colons = 0;
-      trailing_space = false;
-    }
-    lexer->advance(lexer, false);
-  }
-  lexer->mark_end(lexer);
-  scanner->literal_indent = !in_literal && !in_doctest && line_start && trailing_colons >= 2
-                                ? indent : literal_indent;
   scanner->pending_indent = UINT32_MAX;
-  lexer->result_symbol = TEXT;
+  lexer->result_symbol = TEXT_START;
   return true;
 }
