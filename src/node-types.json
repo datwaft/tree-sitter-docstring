@@ -1,5 +1,31 @@
 [
   {
+    "type": "admonition_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "args_section",
     "named": true,
     "fields": {
@@ -120,6 +146,10 @@
       "required": false,
       "types": [
         {
+          "type": "admonition_section",
+          "named": true
+        },
+        {
           "type": "args_section",
           "named": true
         },
@@ -128,7 +158,31 @@
           "named": true
         },
         {
+          "type": "examples_section",
+          "named": true
+        },
+        {
+          "type": "keyword_args_section",
+          "named": true
+        },
+        {
+          "type": "methods_section",
+          "named": true
+        },
+        {
+          "type": "notes_section",
+          "named": true
+        },
+        {
+          "type": "other_parameters_section",
+          "named": true
+        },
+        {
           "type": "raises_section",
+          "named": true
+        },
+        {
+          "type": "references_section",
           "named": true
         },
         {
@@ -136,11 +190,53 @@
           "named": true
         },
         {
+          "type": "see_also_section",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         },
         {
+          "type": "todo_section",
+          "named": true
+        },
+        {
+          "type": "warning_section",
+          "named": true
+        },
+        {
+          "type": "warns_section",
+          "named": true
+        },
+        {
           "type": "yields_section",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "examples_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "text",
           "named": true
         }
       ]
@@ -170,6 +266,118 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "keyword_args_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "parameter",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "methods_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "notes_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "other_parameters_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "parameter",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -239,6 +447,32 @@
     }
   },
   {
+    "type": "references_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "return_value",
     "named": true,
     "fields": {
@@ -285,6 +519,114 @@
       "types": [
         {
           "type": "return_value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "see_also_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "todo_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "warning_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "warns_section",
+    "named": true,
+    "fields": {
+      "header": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "section_header",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "exception",
+          "named": true
+        },
+        {
+          "type": "text",
           "named": true
         }
       ]

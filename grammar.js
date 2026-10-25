@@ -10,6 +10,17 @@ module.exports = grammar({
     $._yields_header,
     $._raises_header,
     $._attributes_header,
+    $._keyword_args_header,
+    $._other_parameters_header,
+    $._warns_header,
+    $._examples_header,
+    $._notes_header,
+    $._warning_header,
+    $._admonition_header,
+    $._see_also_header,
+    $._references_header,
+    $._todo_header,
+    $._methods_header,
     $._section_end,
     $._entry_end,
     $.identifier,
@@ -30,6 +41,17 @@ module.exports = grammar({
       $.yields_section,
       $.raises_section,
       $.attributes_section,
+      $.keyword_args_section,
+      $.other_parameters_section,
+      $.warns_section,
+      $.examples_section,
+      $.notes_section,
+      $.warning_section,
+      $.admonition_section,
+      $.see_also_section,
+      $.references_section,
+      $.todo_section,
+      $.methods_section,
     )),
 
     args_section: $ => seq(
@@ -59,6 +81,72 @@ module.exports = grammar({
     attributes_section: $ => seq(
       field('header', alias($._attributes_header, $.section_header)),
       repeat(choice($.attribute, $.text)),
+      $._section_end,
+    ),
+
+    keyword_args_section: $ => seq(
+      field('header', alias($._keyword_args_header, $.section_header)),
+      repeat(choice($.parameter, $.text)),
+      $._section_end,
+    ),
+
+    other_parameters_section: $ => seq(
+      field('header', alias($._other_parameters_header, $.section_header)),
+      repeat(choice($.parameter, $.text)),
+      $._section_end,
+    ),
+
+    warns_section: $ => seq(
+      field('header', alias($._warns_header, $.section_header)),
+      repeat(choice($.exception, $.text)),
+      $._section_end,
+    ),
+
+    examples_section: $ => seq(
+      field('header', alias($._examples_header, $.section_header)),
+      repeat($.text),
+      $._section_end,
+    ),
+
+    notes_section: $ => seq(
+      field('header', alias($._notes_header, $.section_header)),
+      repeat($.text),
+      $._section_end,
+    ),
+
+    warning_section: $ => seq(
+      field('header', alias($._warning_header, $.section_header)),
+      repeat($.text),
+      $._section_end,
+    ),
+
+    admonition_section: $ => seq(
+      field('header', alias($._admonition_header, $.section_header)),
+      repeat($.text),
+      $._section_end,
+    ),
+
+    see_also_section: $ => seq(
+      field('header', alias($._see_also_header, $.section_header)),
+      repeat($.text),
+      $._section_end,
+    ),
+
+    references_section: $ => seq(
+      field('header', alias($._references_header, $.section_header)),
+      repeat($.text),
+      $._section_end,
+    ),
+
+    todo_section: $ => seq(
+      field('header', alias($._todo_header, $.section_header)),
+      repeat($.text),
+      $._section_end,
+    ),
+
+    methods_section: $ => seq(
+      field('header', alias($._methods_header, $.section_header)),
+      repeat($.text),
       $._section_end,
     ),
 

@@ -10,6 +10,17 @@ enum TokenType {
   YIELDS_HEADER,
   RAISES_HEADER,
   ATTRIBUTES_HEADER,
+  KEYWORD_ARGS_HEADER,
+  OTHER_PARAMETERS_HEADER,
+  WARNS_HEADER,
+  EXAMPLES_HEADER,
+  NOTES_HEADER,
+  WARNING_HEADER,
+  ADMONITION_HEADER,
+  SEE_ALSO_HEADER,
+  REFERENCES_HEADER,
+  TODO_HEADER,
+  METHODS_HEADER,
   SECTION_END,
   ENTRY_END,
   IDENTIFIER,
@@ -272,7 +283,7 @@ bool tree_sitter_docstring_external_scanner_scan(void *payload, TSLexer *lexer,
       return true;
     }
   } else if (!in_literal && !scanner->in_entry) {
-    char heading[16] = {0};
+    char heading[32] = {0};
     uint32_t length = 0;
     bool is_exception = valid_symbols[EXCEPTION_NAME];
     if (!is_exception) {
@@ -284,7 +295,9 @@ bool tree_sitter_docstring_external_scanner_scan(void *payload, TSLexer *lexer,
     bool has_name = name_start(lexer->lookahead);
     while (name_continue(lexer->lookahead) || (is_exception && lexer->lookahead == '.')) {
       if (length < sizeof(heading) - 1) {
-        heading[length] = lexer->lookahead < 0x80 ? (char)lexer->lookahead : '?';
+        int32_t c = lexer->lookahead;
+        heading[length] = c >= 'A' && c <= 'Z' ? (char)(c + 'a' - 'A') :
+                          c < 0x80 ? (char)c : '?';
       }
       length++;
       lexer->advance(lexer, false);
@@ -292,10 +305,64 @@ bool tree_sitter_docstring_external_scanner_scan(void *payload, TSLexer *lexer,
     lexer->mark_end(lexer);
     skip_horizontal_space(lexer);
 
-    static const char *const headings[] = {"Args", "Returns", "Yields", "Raises", "Attributes"};
-    for (unsigned token = ARGS_HEADER; token <= ATTRIBUTES_HEADER; token++) {
-      if (valid_symbols[token] && length < sizeof(heading) &&
-          strcmp(heading, headings[token]) == 0 && lexer->lookahead == ':') {
+    // Normalize only the heading probe; the token still preserves its source text.
+    bool single_word = true;
+    while (name_start(lexer->lookahead)) {
+      single_word = false;
+      if (length < sizeof(heading) - 1) heading[length] = ' ';
+      length++;
+      while (name_continue(lexer->lookahead)) {
+        int32_t c = lexer->lookahead;
+        if (length < sizeof(heading) - 1) {
+          heading[length] = c >= 'A' && c <= 'Z' ? (char)(c + 'a' - 'A') :
+                            c < 0x80 ? (char)c : '?';
+        }
+        length++;
+        lexer->advance(lexer, false);
+      }
+      lexer->mark_end(lexer);
+      skip_horizontal_space(lexer);
+    }
+    static const struct { const char *name; enum TokenType token; } headings[] = {
+      {"args", ARGS_HEADER},
+      {"arguments", ARGS_HEADER},
+      {"parameters", ARGS_HEADER},
+      {"return", RETURNS_HEADER},
+      {"returns", RETURNS_HEADER},
+      {"yield", YIELDS_HEADER},
+      {"yields", YIELDS_HEADER},
+      {"raise", RAISES_HEADER},
+      {"raises", RAISES_HEADER},
+      {"attributes", ATTRIBUTES_HEADER},
+      {"keyword args", KEYWORD_ARGS_HEADER},
+      {"keyword arguments", KEYWORD_ARGS_HEADER},
+      {"other args", OTHER_PARAMETERS_HEADER},
+      {"other arguments", OTHER_PARAMETERS_HEADER},
+      {"other parameters", OTHER_PARAMETERS_HEADER},
+      {"warn", WARNS_HEADER},
+      {"warns", WARNS_HEADER},
+      {"example", EXAMPLES_HEADER},
+      {"examples", EXAMPLES_HEADER},
+      {"note", NOTES_HEADER},
+      {"notes", NOTES_HEADER},
+      {"warning", WARNING_HEADER},
+      {"warnings", WARNING_HEADER},
+      {"attention", ADMONITION_HEADER},
+      {"caution", ADMONITION_HEADER},
+      {"danger", ADMONITION_HEADER},
+      {"error", ADMONITION_HEADER},
+      {"hint", ADMONITION_HEADER},
+      {"important", ADMONITION_HEADER},
+      {"tip", ADMONITION_HEADER},
+      {"see also", SEE_ALSO_HEADER},
+      {"references", REFERENCES_HEADER},
+      {"todo", TODO_HEADER},
+      {"methods", METHODS_HEADER},
+    };
+    for (unsigned i = 0; i < sizeof(headings) / sizeof(headings[0]); i++) {
+      enum TokenType token = headings[i].token;
+      if (line_start && valid_symbols[token] && length < sizeof(heading) &&
+          strcmp(heading, headings[i].name) == 0 && lexer->lookahead == ':') {
         lexer->advance(lexer, false);
         trailing_colons = 1;
         trailing_space = horizontal_space(lexer->lookahead);
@@ -313,7 +380,7 @@ bool tree_sitter_docstring_external_scanner_scan(void *payload, TSLexer *lexer,
       }
     }
 
-    if (has_name && (valid_symbols[IDENTIFIER] || is_exception)) {
+    if (has_name && single_word && (valid_symbols[IDENTIFIER] || is_exception)) {
       bool complete = true;
       if (!is_exception && lexer->lookahead == '(') {
         lexer->advance(lexer, false);
