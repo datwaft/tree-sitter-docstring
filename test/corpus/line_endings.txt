@@ -52,3 +52,23 @@ Returns:
     (return_value
       description: (description
         (text)))))
+
+==================
+Windows doctest output stays literal
+==================
+
+>>> show_help()
+Args:
+    pretend: Example output.
+Returns:
+    More example output.
+
+Notes:
+    A real section.
+
+---
+
+(document
+  (doctest (doctest_prompt) (code_line))
+  (text) (text) (text) (text)
+  (notes_section header: (section_header) (text)))

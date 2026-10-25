@@ -1,0 +1,847 @@
+==================
+` fenced python block
+==================
+
+Examples:
+    ```python
+    value = 1
+    ```
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+` fenced py block
+==================
+
+Examples:
+    ```py
+    value = 1
+    ```
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+` fenced python3 block
+==================
+
+Examples:
+    ```python3
+    value = 1
+    ```
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+` fenced py3 block
+==================
+
+Examples:
+    ```py3
+    value = 1
+    ```
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+` fenced javascript block
+==================
+
+Examples:
+    ```javascript
+    value = 1
+    ```
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+` fenced unlabelled block
+==================
+
+Examples:
+    ```
+    value = 1
+    ```
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+~ fenced python block
+==================
+
+Examples:
+    ~~~~python
+    value = 1
+    ~~~~
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+~ fenced py block
+==================
+
+Examples:
+    ~~~~py
+    value = 1
+    ~~~~
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+~ fenced python3 block
+==================
+
+Examples:
+    ~~~~python3
+    value = 1
+    ~~~~
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+~ fenced py3 block
+==================
+
+Examples:
+    ~~~~py3
+    value = 1
+    ~~~~
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+~ fenced javascript block
+==================
+
+Examples:
+    ~~~~javascript
+    value = 1
+    ~~~~
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+~ fenced unlabelled block
+==================
+
+Examples:
+    ~~~~
+    value = 1
+    ~~~~
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+code-block directive for python
+==================
+
+Example:
+    .. code-block:: python
+
+        value = 1
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+code-block directive for py
+==================
+
+Example:
+    .. code-block:: py
+
+        value = 1
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+code-block directive for python3
+==================
+
+Example:
+    .. code-block:: python3
+
+        value = 1
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+code-block directive for py3
+==================
+
+Example:
+    .. code-block:: py3
+
+        value = 1
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+code-block directive for text
+==================
+
+Example:
+    .. code-block:: text
+
+        value = 1
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+sourcecode directive for python
+==================
+
+Example:
+    .. sourcecode:: python
+
+        value = 1
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+sourcecode directive for py
+==================
+
+Example:
+    .. sourcecode:: py
+
+        value = 1
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+sourcecode directive for python3
+==================
+
+Example:
+    .. sourcecode:: python3
+
+        value = 1
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+sourcecode directive for py3
+==================
+
+Example:
+    .. sourcecode:: py3
+
+        value = 1
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+sourcecode directive for text
+==================
+
+Example:
+    .. sourcecode:: text
+
+        value = 1
+Notes:
+    After the code.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+Directive options are not code
+==================
+
+Examples:
+    .. code-block:: python
+        :linenos:
+        :caption: A sample
+
+        value = 1
+Returns:
+    A value.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (rst_code_block
+      (code_directive)
+      (directive_option)
+      (directive_option)
+      (code_content)))
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Doctest inputs exclude expected output
+==================
+
+Examples:
+    >>> def double(value):
+    ...     return value * 2
+    >>> double(3)
+    6
+
+    >>> double(4)
+    8
+Notes:
+    More prose.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (doctest
+      (doctest_prompt)
+      (code_line)
+      (doctest_prompt)
+      (code_line)
+      (doctest_prompt)
+      (code_line))
+    (text)
+    (doctest
+      (doctest_prompt)
+      (code_line))
+    (text))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+Doctests work without an Examples heading
+==================
+
+A short example.
+
+>>> total = 1 + 2
+>>> total
+3
+
+---
+
+(document
+  (text)
+  (doctest
+    (doctest_prompt)
+    (code_line)
+    (doctest_prompt)
+    (code_line))
+  (text))
+
+==================
+Code blocks protect apparent headings
+==================
+
+Examples:
+    ```python
+    Args:
+        fake: Not a docstring parameter.
+    ```
+Args:
+    real: A real parameter.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)
+      (fence_end)))
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Code blocks work inside descriptions
+==================
+
+Args:
+    value: A value with an example.
+
+        ```python
+        total = 2 + 2
+        ```
+    other: Another value.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)
+        (fenced_code_block
+          (fence_start)
+          (code_content)
+          (fence_end))))
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Unfinished fenced block ends on dedent
+==================
+
+Examples:
+    ```python
+    value = 1
+Notes:
+    Recover here.
+
+---
+
+(document
+  (examples_section
+    header: (section_header)
+    (fenced_code_block
+      (fence_start)
+      (code_content)))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+Unfinished fenced block at EOF
+==================
+
+```python
+value = 1
+
+---
+
+(document
+  (fenced_code_block
+    (fence_start)
+    (code_content)))
+
+==================
+Empty blocks are accepted
+==================
+
+```python
+```
+.. code-block:: python
+
+Notes:
+    After empty blocks.
+
+---
+
+(document
+  (fenced_code_block
+    (fence_start)
+    (fence_end))
+  (rst_code_block
+    (code_directive))
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+A shorter fence does not close a block
+==================
+
+````python
+```
+value = 1
+````
+
+---
+
+(document
+  (fenced_code_block
+    (fence_start)
+    (code_content)
+    (fence_end)))
+
+==================
+A different fence marker stays inside the block
+==================
+
+```python
+~~~
+value = 1
+```
+
+---
+
+(document
+  (fenced_code_block
+    (fence_start)
+    (code_content)
+    (fence_end)))
+
+==================
+Doctest continuation markers in prose stay prose
+==================
+
+A paragraph.
+... and some more prose.
+
+---
+
+(document
+  (text)
+  (text))
+
+==================
+Doctests inside literal blocks
+==================
+
+A runnable example::
+
+    >>> total = 1 + 2
+    >>> total
+    3
+
+Notes:
+    After the example.
+
+---
+
+(document
+  (text)
+  (doctest
+    (doctest_prompt)
+    (code_line)
+    (doctest_prompt)
+    (code_line))
+  (text)
+  (notes_section
+    header: (section_header)
+    (text)))
+
+
+==================
+Doctest output that resembles sections stays literal
+==================
+
+>>> show_help()
+Args:
+    pretend: Example output.
+Returns:
+    More example output.
+
+Notes:
+    A real section.
+
+---
+
+(document
+  (doctest
+    (doctest_prompt)
+    (code_line))
+  (text)
+  (text)
+  (text)
+  (text)
+  (notes_section
+    header: (section_header)
+    (text)))
+
+==================
+Fences printed by a doctest stay output
+==================
+
+>>> show_code()
+```python
+value = 1
+```
+
+Notes:
+    A real section.
+
+---
+
+(document
+  (doctest
+    (doctest_prompt)
+    (code_line))
+  (text)
+  (text)
+  (text)
+  (notes_section
+    header: (section_header)
+    (text)))

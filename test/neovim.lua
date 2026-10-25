@@ -358,6 +358,158 @@ function cases.extension_folds()
   fold_range("See Also:", "Another function.")
 end
 
+---@return vim.treesitter.LanguageTree
+local function code_fixture()
+  return open(table.concat(vim.fn.readfile(root .. "/test/fixtures/code_blocks.txt"), "\n"), "docstring")
+end
+
+function cases.code_injection()
+  local parser = code_fixture()
+  for _, needle in ipairs({ "fenced_value", "directive_value", "def double", "return value", "double(3)" }) do
+    local row, col = position(needle)
+    equal(parser:language_for_range({ row, col, row, col + 1 }):lang(), "python")
+  end
+  for _, needle in ipairs({ ">>>", "...", "    6", '"code":', "shell_command" }) do
+    local row, col = position(needle)
+    col = col + #(needle:match("^%s*"))
+    equal(parser:language_for_range({ row, col, row, col + 1 }):lang(), "docstring")
+  end
+  local count = 0
+  parser:for_each_tree(function(tree, language_tree)
+    if language_tree:lang() == "python" then
+      assert(not tree:root():has_error(), tree:root():sexpr())
+      count = count + 1
+    end
+  end)
+  equal(count, 3)
+end
+
+function cases.code_aliases()
+  for _, language in ipairs({ "python", "py", "python3", "py3" }) do
+    for _, opener in ipairs({
+      "```" .. language,
+      "~~~" .. language,
+      ".. code-block:: " .. language,
+      ".. sourcecode:: " .. language,
+    }) do
+      local ending = opener:sub(1, 3) == "```" and "```" or opener:sub(1, 3) == "~~~" and "~~~" or ""
+      local indent = ending == "" and "    " or ""
+      local parser = open(opener .. "\n" .. indent .. "alias_value = 1\n" .. ending, "docstring")
+      local row, col = position("alias_value")
+      equal(parser:language_for_range({ row, col, row, col + 1 }):lang(), "python")
+    end
+  end
+end
+
+function cases.code_nested()
+  local text =
+    'def outer():\n    """A function.\n\n    Examples:\n        ```python\n        def double(value):\n            return value * 2\n        ```\n    """\n    return None'
+  local parser = open(text, "python")
+  vim.treesitter.start(0, "python")
+  local row, col = position("return value")
+  equal(parser:language_for_range({ row, col, row, col + 6 }):lang(), "python")
+  local root = parser:language_for_range({ row, col, row, col + 1 }):parent()
+  assert(root and root:lang() == "docstring")
+  local found = false
+  for _, capture in ipairs(vim.treesitter.get_captures_at_pos(0, row, col)) do
+    if capture.lang == "python" and capture.capture:match("^keyword") then
+      found = true
+    end
+  end
+  assert(found, "Missing Python keyword highlighting inside the docstring example")
+end
+
+function cases.code_indent()
+  -- nvim-treesitter currently applies Python indentation to doctest prompt lines.
+  -- Keep this check on blocks whose source is directly valid Python.
+  open(
+    [=[
+Examples:
+    ```python
+    def double(value):
+        return value * 2
+    ```
+
+    .. code-block:: python
+        :linenos:
+
+        directive_value = 2
+
+    ```json
+    {"code": "is data"}
+    ```
+
+Notes:
+    A final paragraph.
+]=],
+    "docstring"
+  )
+  local before = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  vim.cmd("silent normal! gg=G")
+  equal(vim.api.nvim_buf_get_lines(0, 0, -1, false), before)
+end
+
+function cases.code_edits()
+  local parser = open("```python\neditable_value = 1\n```", "docstring")
+  local row, col = position("editable_value")
+  equal(parser:language_for_range({ row, col, row, col + 1 }):lang(), "python")
+  vim.api.nvim_buf_set_text(0, 0, 3, 0, 9, { "json" })
+  parser:parse(true)
+  equal(parser:language_for_range({ row, col, row, col + 1 }):lang(), "docstring")
+  vim.api.nvim_buf_set_text(0, 0, 3, 0, 7, { "python" })
+  parser:parse(true)
+  equal(parser:language_for_range({ row, col, row, col + 1 }):lang(), "python")
+end
+
+function cases.code_folds()
+  local parser = open(
+    [=[
+Examples:
+    ~~~python
+    fenced_value = 1
+    ~~~~
+
+    .. code-block:: python
+
+        directive_value = 2
+
+    >>> total = 1 + 2
+    >>> print(total)
+    3
+
+Notes:
+    A final paragraph.
+]=],
+    "docstring"
+  )
+  vim.wo.foldmethod = "expr"
+  vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+  vim.wo.foldminlines = 1
+  vim.wo.foldlevel = 99
+  parser:parse(true)
+  vim.cmd("silent normal! zx")
+  fold_range("~~~python", "~~~~")
+  fold_range(".. code-block:: python", "directive_value")
+  fold_range(">>> total =", ">>> print(total)")
+end
+
+function cases.code_multiline()
+  local parser = open(
+    "Examples:\n    >>> values = [\n    ...     1,\n    ...     2,\n    ... ]\n    >>> sum(values)\n    3\n    >>> ",
+    "docstring"
+  )
+  local count = 0
+  parser:for_each_tree(function(tree, language_tree)
+    if language_tree:lang() == "python" then
+      assert(not tree:root():has_error(), tree:root():sexpr())
+      count = count + 1
+    end
+  end)
+  equal(count, 1)
+  local row, col = position("sum(values)")
+  equal(parser:language_for_range({ row, col, row, col + 1 }):lang(), "python")
+end
+
 local name = assert(arg[1], "Expected a test case name")
 assert(cases[name], "Unknown case: " .. name)()
 local messages = vim.fn.execute("messages")

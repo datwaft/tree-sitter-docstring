@@ -1,0 +1,35 @@
+Examples:
+    A fenced Python example:
+
+    ```python
+    fenced_value = 1
+    ```
+
+    A directive example:
+
+    .. code-block:: python
+        :linenos:
+
+        directive_value = 2
+
+    A doctest example:
+
+    >>> def double(value):
+    ...     return value * 2
+    >>> double(3)
+    6
+
+    A non-Python block:
+
+    ```json
+    {"code": "is data"}
+    ```
+
+    An unlabelled block:
+
+    ```
+    shell_command --flag
+    ```
+
+Notes:
+    A final paragraph.
