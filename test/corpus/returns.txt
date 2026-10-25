@@ -1,0 +1,174 @@
+==================
+Return description without a type
+==================
+
+Returns:
+  The matching record.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Typed return value
+==================
+
+Returns:
+  dict[str, list[int]]: Matching records.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Return description starting on the next line
+==================
+
+Returns:
+  tuple[int, str]:
+    The identifier and name.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Multiline return description and literal data
+==================
+
+Returns:
+  A tuple (identifier, contents), where identifier is the key
+  and contents contains the record. For example:
+
+    {"key": "value"}
+
+  Missing records return None.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)
+        (text)
+        (text)
+        (text)))))
+
+==================
+Return type without description
+==================
+
+Returns:
+  bool:
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type))))
+
+==================
+Yield description without a type
+==================
+
+Yields:
+  The next matching record.
+
+---
+
+(document
+  (yields_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Typed yielded value
+==================
+
+Yields:
+  package.Record: The next record.
+  Records retain their original order.
+
+---
+
+(document
+  (yields_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)
+        (text)))))
+
+==================
+Referenced return type
+==================
+
+Returns:
+  :class:`package.Record`: The matching record.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Leading colon remains return prose
+==================
+
+Returns:
+  : An unfinished sentence.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Quoted colons in return types
+==================
+
+Returns:
+  Literal["left:right"]: A label.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))

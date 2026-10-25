@@ -1,0 +1,284 @@
+==================
+Arguments without types
+==================
+
+Args:
+  path: File to read.
+  strict: Require a match.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Arguments with parenthesized types
+==================
+
+Args:
+    path (str): File to read.
+    count (int, optional): Maximum results.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Nested type syntax
+==================
+
+Args:
+  factory (Callable[[tuple[int, str]], dict[str, list[int]]]): Build a value.
+  pair (tuple(int, str)): A pair.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Prose and referenced types
+==================
+
+Args:
+  values (list of str): Values.
+  item (:class:`package.Item`): An item.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Variadic arguments
+==================
+
+Args:
+  *values: Positional values.
+  **options (dict[str, object]): Keyword options.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Descriptions starting on the next line
+==================
+
+Args:
+  path:
+    File to read.
+  strict (bool):
+    Require a match.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Multiline and multiparagraph argument descriptions
+==================
+
+Args:
+  path: File to read.
+    Relative paths use the current directory.
+
+    Missing files are allowed.
+  strict: Require a match.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)
+        (text)
+        (text)))
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Lists and code inside argument descriptions
+==================
+
+Args:
+  options: Supported options:
+    - fast: Skip validation.
+    - safe: Validate input.
+
+    Example::
+
+      {"fast": True}
+  path: File to read.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)
+        (text)
+        (text)
+        (text)
+        (text)))
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Arguments with empty descriptions
+==================
+
+Args:
+  path:
+  strict (bool):
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier))
+    (parameter
+      name: (identifier)
+      type: (type))))
+
+==================
+Nonstandard indentation widths
+==================
+
+Args:
+   path: File to read.
+      This line continues the description.
+   strict: Require a match.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)
+        (text)))
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Unicode parameter names and descriptions
+==================
+
+Args:
+  año (int): Año de publicación.
+  名称: 名称。
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Quoted parentheses in argument types
+==================
+
+Args:
+  delimiter (Literal["(", ")"]): A delimiter.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))

@@ -1,0 +1,283 @@
+==================
+Summary and all core sections
+==================
+
+Fetch a record.
+
+Args:
+  key: Record key.
+
+Returns:
+  The matching record.
+
+Raises:
+  KeyError: No record exists.
+
+Attributes:
+  cache: Cached records.
+
+Yields:
+  A record.
+
+---
+
+(document
+  (text)
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text))))
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text))))
+  (raises_section
+    header: (section_header)
+    (exception
+      name: (exception_name)
+      description: (description
+        (text))))
+  (attributes_section
+    header: (section_header)
+    (attribute
+      name: (identifier)
+      description: (description
+        (text))))
+  (yields_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Repeated sections in arbitrary order
+==================
+
+Returns:
+  First result.
+Args:
+  first: First argument.
+Args:
+  second: Second argument.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text))))
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text))))
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Empty sections and unfinished heading
+==================
+
+Args:
+Returns:
+Yields:
+Raises:
+Attributes:
+
+---
+
+(document
+  (args_section
+    header: (section_header))
+  (returns_section
+    header: (section_header))
+  (yields_section
+    header: (section_header))
+  (raises_section
+    header: (section_header))
+  (attributes_section
+    header: (section_header)))
+
+==================
+Raw Python docstring indentation
+==================
+
+Fetch a record.
+
+    Args:
+      key: Record key.
+        This is a continuation.
+    Returns:
+      The matching record.
+
+---
+
+(document
+  (text)
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)
+        (text))))
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Section and field whitespace
+==================
+
+Args :  
+
+    key ( int ) :  Record key.  
+
+Returns:  
+    The matching record.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text))))
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Dedented prose ends a section
+==================
+
+Args:
+  key: Record key.
+
+This is ordinary prose.
+
+Returns:
+  The matching record.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text))))
+  (text)
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Nested section names stay in descriptions
+==================
+
+Args:
+  doc: A literal example:
+    Returns:
+      A result.
+  key: Record key.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)
+        (text)
+        (text)))
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Unknown headings and inline section names remain text
+==================
+
+Custom metadata:
+  This is user-defined text.
+This sentence mentions Args: and Returns:.
+Args: this is not a section heading.
+
+---
+
+(document
+  (text)
+  (text)
+  (text)
+  (text))
+
+==================
+Malformed argument falls back locally to text
+==================
+
+Args:
+  broken (list[int]: An unfinished type.
+  key: Record key.
+Returns:
+  The matching record.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (text)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text))))
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Unfinished argument does not hide the next section
+==================
+
+Args:
+  still typing
+Returns:
+  The matching record.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (text))
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))

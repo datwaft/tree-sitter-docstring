@@ -1,0 +1,54 @@
+==================
+Windows line endings
+==================
+
+Args:
+  key: Record key.
+Returns:
+  The matching record.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text))))
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Tab indentation and adjacent fields
+==================
+
+Args:
+	first: First value.
+		A continuation.
+	second: Second value.
+Returns:
+	The result.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)
+        (text)))
+    (parameter
+      name: (identifier)
+      description: (description
+        (text))))
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))

@@ -1,0 +1,46 @@
+==================
+Class attributes
+==================
+
+Attributes:
+  enabled: Whether the service is enabled.
+  records (list[Record]): Cached records.
+
+---
+
+(document
+  (attributes_section
+    header: (section_header)
+    (attribute
+      name: (identifier)
+      description: (description
+        (text)))
+    (attribute
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Multiline attribute and empty description
+==================
+
+Attributes:
+  enabled (bool):
+    Whether the service is enabled.
+    Defaults to True.
+  records:
+
+---
+
+(document
+  (attributes_section
+    header: (section_header)
+    (attribute
+      name: (identifier)
+      type: (type)
+      description: (description
+        (text)
+        (text)))
+    (attribute
+      name: (identifier))))

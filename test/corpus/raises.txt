@@ -1,0 +1,56 @@
+==================
+Exceptions and qualified names
+==================
+
+Raises:
+  ValueError: The value is invalid.
+  package.ReadError: Reading failed.
+
+---
+
+(document
+  (raises_section
+    header: (section_header)
+    (exception
+      name: (exception_name)
+      description: (description
+        (text)))
+    (exception
+      name: (exception_name)
+      description: (description
+        (text)))))
+
+==================
+Exception description starting on the next line
+==================
+
+Raises:
+  ValueError:
+    The value is invalid.
+    Use a positive number.
+
+---
+
+(document
+  (raises_section
+    header: (section_header)
+    (exception
+      name: (exception_name)
+      description: (description
+        (text)
+        (text)))))
+
+==================
+Exception without description
+==================
+
+Raises:
+  ValueError:
+
+---
+
+(document
+  (raises_section
+    header: (section_header)
+    (exception
+      name: (exception_name))))
