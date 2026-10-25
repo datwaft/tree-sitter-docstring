@@ -1,7 +1,7 @@
 local root = vim.fn.getcwd()
 vim.opt.runtimepath:prepend(root .. "/.tests/deps/nvim-treesitter")
 vim.opt.runtimepath:prepend(root .. "/.tests/deps/nvim-treesitter/runtime")
-vim.opt.runtimepath:prepend(root)
+vim.opt.runtimepath:prepend(root .. "/runtime")
 vim.treesitter.language.add("docstring", { path = root .. "/.tests/docstring.so" })
 vim.treesitter.language.add("python", { path = root .. "/.tests/python.so" })
 vim.o.more = false

@@ -4,7 +4,8 @@
       "name": "docstring",
       "scope": "text.docstring",
       "path": ".",
-      "injection-regex": "^docstring$"
+      "injection-regex": "^docstring$",
+      "highlights": "runtime/queries/docstring/highlights.scm"
     }
   ],
   "metadata": {
