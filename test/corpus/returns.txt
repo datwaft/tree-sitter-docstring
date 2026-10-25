@@ -172,3 +172,152 @@ Returns:
       type: (type)
       description: (description
         (text)))))
+
+==================
+Colon in ordinary return prose
+==================
+
+Returns:
+  A string formatted as key: value.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Parentheses do not turn a return sentence into a type
+==================
+
+Returns:
+  A tuple (left, right): both values are present.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Colon in ordinary yield prose
+==================
+
+Yields:
+  A mapping from names: values.
+
+---
+
+(document
+  (yields_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Prose type connectors remain supported
+==================
+
+Returns:
+  list of str or None: The matching entries.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Union of arbitrary type names
+==================
+
+Returns:
+  Widget | OtherWidget: The matching item.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Optional return type modifier
+==================
+
+Returns:
+  Widget, optional: The matching item.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Unregistered return type name
+==================
+
+Returns:
+  UnregisteredType: The matching item.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Union of Sphinx references
+==================
+
+Returns:
+  :py:class:`Widget` | :py:class:`OtherWidget`: The matching item.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      type: (type)
+      description: (description
+        (text)))))
+
+==================
+Referenced type mentioned in prose has no type prefix
+==================
+
+Returns:
+  :class:`Widget` describes the result.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))

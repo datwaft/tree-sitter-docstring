@@ -1,0 +1,240 @@
+==================
+Literal example before a real section
+==================
+
+Fetch records.
+
+Documentation example::
+
+    Args:
+        example: This belongs to the example.
+
+Args:
+    actual: A real argument.
+
+---
+
+(document
+  (text)
+  (text)
+  (text)
+  (text)
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Standalone literal marker
+==================
+
+::
+
+  Args:
+    example: Example text.
+  Returns:
+    An example result.
+
+Returns:
+  The real result.
+
+---
+
+(document
+  (text)
+  (text)
+  (text)
+  (text)
+  (text)
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)))))
+
+==================
+Literal example with Python source indentation
+==================
+
+Fetch records.
+
+    Documentation example::
+
+      Args:
+        example: Example text.
+
+    Args:
+      actual: A real argument.
+
+---
+
+(document
+  (text)
+  (text)
+  (text)
+  (text)
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Section name used as a literal marker
+==================
+
+Args::
+
+  Returns:
+    An example result.
+
+Args:
+  actual: A real argument.
+
+---
+
+(document
+  (text)
+  (text)
+  (text)
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Literal block directly inside an argument section
+==================
+
+Args:
+  Example::
+
+    example: Example text.
+    Returns:
+      An example result.
+
+  actual: A real argument.
+
+---
+
+(document
+  (args_section
+    header: (section_header)
+    (text)
+    (text)
+    (text)
+    (text)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Literal marker in a return description
+==================
+
+Returns:
+  Example::
+
+    Args:
+      example: Example text.
+
+  End of the example.
+
+Args:
+  actual: A real argument.
+
+---
+
+(document
+  (returns_section
+    header: (section_header)
+    (return_value
+      description: (description
+        (text)
+        (text)
+        (text)
+        (text))))
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+A nonindented section after a literal marker is real
+==================
+
+Documentation example::
+
+Args:
+  actual: A real argument.
+
+---
+
+(document
+  (text)
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Literal block ending at EOF
+==================
+
+Documentation example::
+
+  Args:
+    example: Example text.
+
+---
+
+(document
+  (text)
+  (text)
+  (text))
+
+==================
+Spaced colons are not a literal marker
+==================
+
+Example: :
+
+  Args:
+    actual: A real argument.
+
+---
+
+(document
+  (text)
+  (args_section
+    header: (section_header)
+    (parameter
+      name: (identifier)
+      description: (description
+        (text)))))
+
+==================
+Literal marker with trailing whitespace
+==================
+
+Documentation example::  
+
+  Args:
+    example: Example text.
+
+---
+
+(document
+  (text)
+  (text)
+  (text))
