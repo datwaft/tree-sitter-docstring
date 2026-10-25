@@ -5,7 +5,9 @@
   "description": "Tree-sitter grammar for Google-style Python docstrings",
   "scripts": {
     "generate": "tree-sitter generate",
-    "test": "tree-sitter test"
+    "test": "node --test --test-concurrency=1 test/*.test.mjs",
+    "test:corpus": "tree-sitter test",
+    "test:queries": "node --test test/queries.test.mjs"
   },
   "devDependencies": {
     "tree-sitter-cli": "0.27.1"

@@ -1,0 +1,27 @@
+Fetch records.
+
+Documentation example::
+
+    Args:
+        example: This belongs to the example.
+
+Args:
+    path (str): File to read.
+    *values: Positional values.
+    **options (dict[str, object]): Keyword options.
+    año (int): Año de publicación.
+
+Returns:
+    A string formatted as key: value.
+
+Returns:
+    list[Record]: The matching records.
+
+Yields:
+    :class:`package.Record`: The next record.
+
+Raises:
+    package.ReadError: Reading failed.
+
+Attributes:
+    enabled (bool): Whether the service is enabled.
