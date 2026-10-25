@@ -13,7 +13,7 @@ test('grammar corpus', () => run('tree-sitter', ['test']));
 function captures(kind) {
   const output = run('tree-sitter', [
     'query', '--captures', '--lib-path', parser, '--lang-name', 'docstring',
-    `runtime/queries/docstring/${kind}.scm`, fixture,
+    `queries/${kind}.scm`, fixture,
   ]);
   return [...output.matchAll(/capture:\s*\d+ - ([\w.]+), start: \((\d+), (\d+)\), end: \((\d+), (\d+)\)/g)]
     .map((match) => ({ name: match[1], start: [+match[2], +match[3]], end: [+match[4], +match[5]] }));

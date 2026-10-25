@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { existsSync, mkdirSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { before, test } from 'node:test';
 import { buildParser, root, run } from './helpers.mjs';
@@ -9,6 +9,7 @@ before(() => {
     existsSync(resolve(root, '.tests/deps/nvim-treesitter/lua/nvim-treesitter/indent.lua')),
   'Run npm run test:setup to install the pinned test dependencies.');
   buildParser();
+  cpSync(resolve(root, 'queries'), resolve(root, '.tests/site/queries/docstring'), { recursive: true });
 });
 
 const cases = {
