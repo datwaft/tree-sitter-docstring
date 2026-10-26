@@ -13,6 +13,9 @@ before(() => {
 });
 
 const cases = {
+  spell_standalone: 'check prose while excluding docstring syntax and code',
+  spell_python: 'override host Python spellchecking for names, types, roles, and code',
+
   inline_highlights: 'highlight reST inline prose inside Python docstrings',
   inline_conceal: 'conceal only inline delimiters with standard query metadata',
   inline_edits: 'recover inline captures after incomplete edits',

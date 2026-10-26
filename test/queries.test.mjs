@@ -122,3 +122,15 @@ test('conceal exactly the inline delimiters, preserving roles and link text', ()
   const found = captures('highlights').filter((c) => c.name === 'conceal');
   assert.deepEqual(found.map(textOf), ['``', '``', '*', '*', '**', '**', '`', '`', '`', '`_', '_', '`', '`', '`', '`']);
 });
+
+test('exclude structural names, types, headings, and roles from spellchecking', () => {
+  const found = captures('highlights');
+  for (const [needle, token] of [['Args:\n    path', 'Args:'], ['path (str)', 'path'],
+    ['*values:', '*values'], ['**options (dict', '**options'], ['año (int)', 'año'],
+    ['enabled (bool)', 'enabled'], ['str): File', 'str'], ['dict[str, object]', 'dict[str, object]'],
+    ['int): Año', 'int'], ['list[Record]', 'list[Record]'], [':class:`package.Record`', ':class:`package.Record`'],
+    ['package.ReadError', 'package.ReadError'], ['bool): Whether', 'bool'], [':class:`Path`', ':class:']]) {
+    hasCapture(found, 'nospell', needle, token);
+  }
+  hasCapture(found, 'spell', 'File to read.');
+});

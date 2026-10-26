@@ -569,6 +569,106 @@ function cases.inline_edits()
   highlight("care", "markup.strong")
 end
 
+---@param injected boolean
+local function spell_fixture(injected)
+  local lines = {
+    "This is wrngsummary.",
+    "",
+    "Args:",
+    "    qzxparam (QzxType): This is wrngdescription.",
+    "",
+    "Attributes:",
+    "    qzxattribute (QzxAttributeType): This is wrngattribute.",
+    "",
+    "Returns:",
+    "    QzxReturnType: This is wrngreturn.",
+    "",
+    "Raises:",
+    "    QzxException: This is wrngexception.",
+    "",
+    "Notes:",
+    "    Use :qzxrole:`qzxtarget` and ``qzxliteral``.",
+    "    Use *wrngemphasis* and **wrngstrong**.",
+    "    See `qzxreference`_ and https://example.org/qzxurl.",
+    "",
+    "Examples:",
+    "    ```python",
+    "    qzxfenced = 1",
+    "    # qzxcomment",
+    "    ```",
+    "",
+    "    ```qzxlanguage",
+    "    qzxunknown",
+    "    ```",
+    "",
+    "    ```",
+    "    qzxunlabelled",
+    "    ```",
+    "",
+    "    .. code-block:: python",
+    "        :qzxoption:",
+    "",
+    "        qzxdirective = 2",
+    "",
+    "    >>> qzxdoctest = 3",
+    "",
+    "This is wrngfinal.",
+  }
+  if injected then
+    for i, line in ipairs(lines) do
+      lines[i] = "    " .. line
+    end
+    lines[1] = '    """' .. lines[1]:sub(5)
+    table.insert(lines, 1, "def demo():")
+    lines[#lines + 1] = '    """'
+    lines[#lines + 1] = "    pass"
+  end
+  local parser = open(table.concat(lines, "\n"), injected and "python" or "docstring")
+  equal(#doc_roots(parser), 1)
+  vim.wo.spell = true
+  vim.bo.spelllang = "en"
+  vim.bo.spellcapcheck = ""
+  vim.treesitter.start(0, vim.bo.filetype)
+  for _, item in ipairs({
+    { "wrngsummary", "wrngsummary" },
+    { "qzxparam", "wrngdescription" },
+    { "QzxType", "wrngdescription" },
+    { "qzxattribute", "wrngattribute" },
+    { "QzxAttributeType", "wrngattribute" },
+    { "QzxReturnType", "wrngreturn" },
+    { "QzxException", "wrngexception" },
+    { "qzxrole", "" },
+    { "qzxtarget", "" },
+    { "qzxliteral", "" },
+    { "wrngemphasis", "wrngemphasis" },
+    { "wrngstrong", "wrngstrong" },
+    { "qzxreference", "" },
+    { "qzxurl", "" },
+    { "qzxfenced", "" },
+    { "qzxcomment", "" },
+    { "qzxlanguage", "" },
+    { "qzxunknown", "" },
+    { "qzxunlabelled", "" },
+    { "qzxoption", "" },
+    { "qzxdirective", "" },
+    { "qzxdoctest", "" },
+    { "wrngfinal", "wrngfinal" },
+  }) do
+    local row, col = position(item[1])
+    vim.api.nvim_win_set_cursor(0, { row + 1, col })
+    local found = vim.fn.spellbadword()[1]
+    assert(found == item[2], item[1] .. ": expected " .. vim.inspect(item[2]) .. ", got " .. vim.inspect(found))
+  end
+end
+
+function cases.spell_standalone()
+  spell_fixture(false)
+end
+
+function cases.spell_python()
+  spell_fixture(true)
+end
+
 local name = assert(arg[1], "Expected a test case name")
 assert(cases[name], "Unknown case: " .. name)()
 local messages = vim.fn.execute("messages")
