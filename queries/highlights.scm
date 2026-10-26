@@ -1,21 +1,21 @@
 (document) @string.documentation
 
 ; Python also highlights the enclosing string at priority 100.
-((section_header) @markup.heading
+((section_header) @markup.heading @nospell
   (#set! priority 110))
 
 ((parameter
-  name: (identifier) @variable.parameter)
+  name: (identifier) @variable.parameter @nospell)
   (#set! priority 110))
 
 ((attribute
-  name: (identifier) @variable.member)
+  name: (identifier) @variable.member @nospell)
   (#set! priority 110))
 
 ([
   (type)
   (exception_name)
-] @type
+] @type @nospell
   (#set! priority 110))
 
 (":" @punctuation.delimiter
@@ -32,7 +32,7 @@
   (code_directive)
   (directive_option)
   (doctest_prompt)
-] @punctuation.special
+] @punctuation.special @nospell
   (#set! priority 110))
 
 ; Inline markup overrides the enclosing Python string and documentation prose.
@@ -48,7 +48,7 @@
 ((interpreted_text (inline_content) @markup.link @nospell)
   (#set! priority 120))
 
-((role_name) @function.builtin
+((role_name) @function.builtin @nospell
   (#set! priority 120))
 
 ((reference (inline_content) @markup.link @nospell)
@@ -60,3 +60,10 @@
 ((markup_delimiter) @punctuation.delimiter @conceal
   (#set! priority 120)
   (#set! conceal ""))
+
+; Override Python's enclosing @spell, including inside nested code injections.
+([
+  (code_content)
+  (code_line)
+] @nospell
+  (#set! priority 110))
